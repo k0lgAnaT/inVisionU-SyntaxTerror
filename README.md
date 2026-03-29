@@ -14,10 +14,7 @@
 - Дизайн и структура интерфейса созданы в **Figma**  
 - В README добавлены скриншоты дизайна, а также ссылка на проект Figma для более детального просмотра  
 
-**Ссылка на Figma-дизайн:** [Figma Project](https://www.figma.com/design/e5CMs1MkVKAvzxWwHAbqO3/Untitled?node-id=0-1&t=i2iJXCadxQdIO5xQ-1)  
-
-### Скриншоты
-![Главная страница](design_figma/auth/login)   
+**Ссылка на Figma-дизайн:** [Figma Project](https://www.figma.com/design/e5CMs1MkVKAvzxWwHAbqO3/Untitled?node-id=0-1&t=i2iJXCadxQdIO5xQ-1)    
 
 ## Технологии
 - **Frontend:** HTML, CSS, JavaScript  
