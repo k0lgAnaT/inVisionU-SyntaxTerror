@@ -6,6 +6,7 @@ import { useState } from 'react';
 const navItems = [
   { href: '/', label: 'Dashboard', icon: '◈' },
   { href: '/leaderboard', label: 'Leaderboard', icon: '⬡' },
+  { href: '/validation', label: 'Validation', icon: '📊' },
   { href: '/upload', label: 'Upload', icon: '↑' },
   { href: '/submit', label: 'Apply', icon: '✦' },
 ];
