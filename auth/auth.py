@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, redirect
+from flask import Blueprint, render_template, request, session, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__, template_folder='templates', static_folder='static')
@@ -8,8 +8,8 @@ users = {} #The database example
 @auth.route("/login", methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        username = request.form['']
-        password = request.form['']
+        username = request.form['username']
+        password = request.form['password']
 
         user_password = users.get(username)
 
@@ -21,17 +21,38 @@ def login():
 
     return 'Login went successfully'
 
-@auth.route("registration")
+@auth.route("registration", methods=['POST', 'GET'])
 def reg():
-    return 'registration'
+    username = request.form['username']
+    password = request.form['password']
+    email = request.form['email']
 
-@auth.route("/reset")
+    if username in users:
+        return "User already exists"
+
+    users[username] = {
+        "password": generate_password_hash(password),
+        "email": email
+    }
+
+    return "Registration successful"
+
+@auth.route("/reset", methods=['GET', 'POST'])
 def reset():
-    return 'reset password'
+    if request.method == 'POST':
+        email = request.form['email']
+        return redirect('/confirmation')
 
-@auth.route("/confirmation")
+    return render_template("reset.html")
+
+@auth.route("/confirmation", methods=['GET', 'POST'])
 def confirm():
-    return 'code confirmation'
+    if request.method == 'POST':
+        code = request.form['code']
+        # проверка
+        return redirect('/new-password')
+
+    return render_template("confirm.html")
 
 @auth.route("/new-password")
 def new_password():
