@@ -89,10 +89,10 @@ export default function SubmitPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
           <div className="mb-8 animate-fade-in-up">
-            <h1 className="text-3xl font-display font-bold text-white mb-1">
+            <h1 className="text-3xl font-display font-bold text-slate-800 mb-1">
               Live <span className="gradient-text">Scoring Preview</span>
             </h1>
-            <p className="text-slate-400 text-sm">Fill in the form and see your AI score update in real-time. Test your application before submitting.</p>
+            <p className="text-slate-600 text-sm">Fill in the form and see your AI score update in real-time. Test your application before submitting.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -103,8 +103,8 @@ export default function SubmitPage() {
               {/* Auto-score toggle */}
               <div className="flex items-center justify-between glass-card-static p-4">
                 <div>
-                  <div className="text-sm font-semibold text-white">Live Scoring</div>
-                  <div className="text-xs text-slate-400">Score updates as you type (every 1.2s)</div>
+                  <div className="text-sm font-semibold text-slate-800">Live Scoring</div>
+                  <div className="text-xs text-slate-600">Score updates as you type (every 1.2s)</div>
                 </div>
                 <button onClick={() => setAutoScore(!autoScore)}
                   className={`relative w-11 h-6 rounded-full transition-all duration-300 ${autoScore ? 'bg-brand-500' : 'bg-white/10'}`}>
@@ -114,30 +114,30 @@ export default function SubmitPage() {
 
               {/* Basic Info */}
               <div className="glass-card-static p-5">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Basic Information</h3>
+                <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-4">Basic Information</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs text-slate-400 mb-1 block">Full Name</label>
+                    <label className="text-xs text-slate-600 mb-1 block">Full Name</label>
                     <input className="input-field" placeholder="Айгерим Казанбаева" value={form.name}
                       onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-400 mb-1 block">Age</label>
+                    <label className="text-xs text-slate-600 mb-1 block">Age</label>
                     <input className="input-field" type="number" placeholder="17" value={form.age}
                       onChange={e => setForm(f => ({ ...f, age: e.target.value }))} />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-400 mb-1 block">City</label>
+                    <label className="text-xs text-slate-600 mb-1 block">City</label>
                     <input className="input-field" placeholder="Алматы" value={form.city}
                       onChange={e => setForm(f => ({ ...f, city: e.target.value }))} />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-400 mb-1 block">GPA (out of 5)</label>
+                    <label className="text-xs text-slate-600 mb-1 block">GPA (out of 5)</label>
                     <input className="input-field" type="number" step="0.1" placeholder="4.5" value={form.gpa}
                       onChange={e => setForm(f => ({ ...f, gpa: e.target.value }))} />
                   </div>
                   <div className="col-span-2">
-                    <label className="text-xs text-slate-400 mb-1 block">School</label>
+                    <label className="text-xs text-slate-600 mb-1 block">School</label>
                     <input className="input-field" placeholder="НИШ Алматы" value={form.school}
                       onChange={e => setForm(f => ({ ...f, school: e.target.value }))} />
                   </div>
@@ -147,9 +147,9 @@ export default function SubmitPage() {
               {/* Essay */}
               <div className="glass-card-static p-5">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-semibold text-white">Motivation Essay *</label>
+                  <label className="text-sm font-semibold text-slate-800">Motivation Essay *</label>
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-400">{wordCount} words</span>
+                    <span className="text-slate-600">{wordCount} words</span>
                     <span className={`px-2 py-0.5 rounded-full font-semibold ${
                       essayStrength === 'strong' ? 'text-emerald-400 bg-emerald-400/10' :
                       essayStrength === 'medium' ? 'text-yellow-400 bg-yellow-400/10' :
@@ -170,26 +170,26 @@ export default function SubmitPage() {
 
               {/* Experience & Achievements */}
               <div className="glass-card-static p-5">
-                <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Experience & Achievements</h3>
+                <h3 className="text-sm font-semibold text-slate-600 uppercase tracking-wider mb-4">Experience & Achievements</h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="text-xs text-slate-400 mb-1 block">Experience (one per line)</label>
+                    <label className="text-xs text-slate-600 mb-1 block">Experience (one per line)</label>
                     <textarea className="input-field" rows={3} placeholder="Founder of XYZ project&#10;Intern at Company&#10;Club organizer"
                       value={form.experience} onChange={e => setForm(f => ({ ...f, experience: e.target.value }))} />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-400 mb-1 block">Achievements (one per line)</label>
+                    <label className="text-xs text-slate-600 mb-1 block">Achievements (one per line)</label>
                     <textarea className="input-field" rows={2} placeholder="1st place olympiad&#10;National grant recipient"
                       value={form.achievements} onChange={e => setForm(f => ({ ...f, achievements: e.target.value }))} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-slate-400 mb-1 block">Languages (comma-sep.)</label>
+                      <label className="text-xs text-slate-600 mb-1 block">Languages (comma-sep.)</label>
                       <input className="input-field" placeholder="Kazakh, Russian, English"
                         value={form.languages} onChange={e => setForm(f => ({ ...f, languages: e.target.value }))} />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-400 mb-1 block">References</label>
+                      <label className="text-xs text-slate-600 mb-1 block">References</label>
                       <input className="input-field" type="number" min="0" max="5"
                         value={form.references} onChange={e => setForm(f => ({ ...f, references: e.target.value }))} />
                     </div>
@@ -198,7 +198,7 @@ export default function SubmitPage() {
                     <input type="checkbox" id="video" checked={form.videoStatement}
                       onChange={e => setForm(f => ({ ...f, videoStatement: e.target.checked }))}
                       className="w-4 h-4 accent-brand-500" />
-                    <label htmlFor="video" className="text-sm text-slate-300">I will submit a video statement</label>
+                    <label htmlFor="video" className="text-sm text-slate-600">I will submit a video statement</label>
                   </div>
                 </div>
               </div>
@@ -219,17 +219,17 @@ export default function SubmitPage() {
             <div className="animate-fade-in-up delay-200">
               {scoring && (
                 <div className="glass-card p-8 text-center">
-                  <div className="w-12 h-12 rounded-full border-2 border-brand-500/30 border-t-brand-500 animate-spin mx-auto mb-4" />
-                  <p className="text-slate-400">AI is analyzing your application...</p>
+                  <div className="w-12 h-12 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-4" />
+                  <p className="text-slate-600">AI is analyzing your application...</p>
                 </div>
               )}
 
               {!scoring && !result && (
                 <div className="glass-card p-10 text-center">
                   <div className="text-5xl mb-4 opacity-30">⚡</div>
-                  <p className="text-slate-400 text-sm">Your score will appear here.<br />Write your essay and click &quot;Score My Application&quot;.</p>
+                  <p className="text-slate-600 text-sm">Your score will appear here.<br />Write your essay and click &quot;Score My Application&quot;.</p>
                   {autoScore && form.essay.length > 30 && (
-                    <p className="text-brand-400 text-xs mt-3 animate-pulse">Live scoring active — waiting for you to pause...</p>
+                    <p className="text-brand-600 text-xs mt-3 animate-pulse">Live scoring active — waiting for you to pause...</p>
                   )}
                 </div>
               )}
@@ -237,22 +237,22 @@ export default function SubmitPage() {
               {!scoring && result && (
                 <div className="space-y-4 animate-fade-in">
                   {/* Score Display */}
-                  <div className="glass-card p-6 text-center"
+                  <div className="glass-card p-6 text-center bg-white"
                     style={{ borderColor: getScoreColor(result.totalScore) + '40', boxShadow: `0 0 30px ${getScoreColor(result.totalScore)}18` }}>
-                    <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Your Score</div>
+                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-2">Your Score</div>
                     <div className="text-7xl font-display font-bold mb-2"
                       style={{ color: getScoreColor(result.totalScore) }}>
                       {result.totalScore}
                     </div>
-                    <div className="text-slate-400 text-sm mb-3">out of 100</div>
+                    <div className="text-slate-500 text-sm mb-3">out of 100</div>
                     <span className={`text-sm font-semibold px-4 py-2 rounded-xl ${getRecommendationBadgeClass(result.shortlistRecommendation)}`}>
                       {getRecommendationLabel(result.shortlistRecommendation)}
                     </span>
                   </div>
 
                   {/* Radar */}
-                  <div className="glass-card p-5">
-                    <h4 className="text-sm font-semibold text-white mb-3">Your Profile Radar</h4>
+                  <div className="glass-card p-5 bg-white">
+                    <h4 className="text-sm font-semibold text-slate-800 mb-3">Your Profile Radar</h4>
                     <div className="h-48">
                       <ResponsiveContainer width="100%" height="100%">
                         <RadarChart data={radarData}>
@@ -265,15 +265,15 @@ export default function SubmitPage() {
                   </div>
 
                   {/* Dimension Scores */}
-                  <div className="glass-card p-5">
-                    <h4 className="text-sm font-semibold text-white mb-4">Score Breakdown</h4>
+                  <div className="glass-card p-5 bg-white">
+                    <h4 className="text-sm font-semibold text-slate-800 mb-4">Score Breakdown</h4>
                     <div className="space-y-3">
                       {Object.entries(result.scores)
                         .filter(([k]) => k !== 'aiSuspicion')
                         .map(([key, dim]) => (
                         <div key={key}>
                           <div className="flex justify-between text-xs mb-1">
-                            <span className="text-slate-400">{dim.label}</span>
+                            <span className="text-slate-600">{dim.label}</span>
                             <span style={{ color: getScoreColor(dim.score) }} className="font-mono font-bold">{dim.score}</span>
                           </div>
                           <div className="h-1.5 rounded-full bg-white/10">
@@ -288,8 +288,8 @@ export default function SubmitPage() {
 
                   {/* Flags & Questions */}
                   {result.flags.length > 0 && (
-                    <div className="glass-card p-5">
-                      <h4 className="text-sm font-semibold text-white mb-3">Flags</h4>
+                    <div className="glass-card p-5 bg-white">
+                      <h4 className="text-sm font-semibold text-slate-800 mb-3">Flags</h4>
                       <div className="flex flex-wrap gap-2">
                         {result.flags.map((f, i) => (
                           <span key={i} className="text-xs px-2 py-1 rounded-lg"
@@ -302,13 +302,13 @@ export default function SubmitPage() {
                   )}
 
                   {result.smartQuestions.length > 0 && (
-                    <div className="glass-card p-5">
-                      <h4 className="text-sm font-semibold text-white mb-3">Interview Questions You May Face</h4>
+                    <div className="glass-card p-5 bg-white">
+                      <h4 className="text-sm font-semibold text-slate-800 mb-3">Interview Questions You May Face</h4>
                       <div className="space-y-2">
                         {result.smartQuestions.map((q, i) => (
-                          <div key={i} className="text-sm text-slate-300 p-3 rounded-lg"
-                            style={{ background: 'rgba(59,92,255,0.05)', border: '1px solid rgba(59,92,255,0.12)' }}>
-                            <span className="text-brand-400 font-bold">Q{i+1}: </span>{q}
+                          <div key={i} className="text-sm text-slate-700 p-3 rounded-lg border border-brand-100"
+                            style={{ background: 'rgba(59,92,255,0.05)' }}>
+                            <span className="text-brand-600 font-bold">Q{i+1}: </span>{q}
                           </div>
                         ))}
                       </div>

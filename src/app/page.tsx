@@ -9,9 +9,9 @@ import { getScoreColor, getRecommendationLabel, getRecommendationBadgeClass } fr
 function StatCard({ value, label, sub, color }: { value: string | number; label: string; sub?: string; color?: string }) {
   return (
     <div className="glass-card p-5 flex flex-col gap-1">
-      <div className="text-3xl font-display font-bold" style={{ color: color || '#6088ff' }}>{value}</div>
-      <div className="text-white font-semibold text-sm">{label}</div>
-      {sub && <div className="text-slate-400 text-xs">{sub}</div>}
+      <div className="text-3xl font-display font-bold" style={{ color: color || 'var(--tw-colors-brand-600)' }}>{value}</div>
+      <div className="text-slate-800 font-semibold text-sm">{label}</div>
+      {sub && <div className="text-slate-500 text-xs">{sub}</div>}
     </div>
   );
 }
@@ -56,14 +56,11 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Navbar blindMode={blindMode} onBlindToggle={() => setBlindMode(!blindMode)} />
+      <Navbar />
 
       <main className="min-h-screen pt-16">
         {/* Hero Banner */}
-        <div className="relative overflow-hidden" style={{
-          background: 'linear-gradient(135deg, #090b1a 0%, #0f1225 60%, #1a0d2e 100%)',
-          borderBottom: '1px solid rgba(59,92,255,0.1)',
-        }}>
+        <div className="relative overflow-hidden bg-brand-50 border-b border-brand-100">
           {/* Animated orbs */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-10 left-1/4 w-72 h-72 rounded-full opacity-10 animate-pulse-slow"
@@ -76,16 +73,15 @@ export default function DashboardPage() {
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
               <div className="animate-fade-in-up">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="px-3 py-1 rounded-full text-xs font-semibold"
-                    style={{ background: 'rgba(59,92,255,0.15)', border: '1px solid rgba(59,92,255,0.3)', color: '#93b4ff' }}>
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 border border-brand-200">
                     Decentrathon 5.0 · AI inDrive Track
                   </span>
                 </div>
-                <h1 className="text-4xl lg:text-5xl font-display font-bold text-white mb-3 leading-tight">
+                <h1 className="text-4xl lg:text-5xl font-display font-bold text-slate-800 mb-3 leading-tight">
                   Candidate <span className="gradient-text">Intelligence</span>
                   <br />Platform
                 </h1>
-                <p className="text-slate-400 text-base max-w-lg leading-relaxed">
+                <p className="text-slate-600 text-base max-w-lg leading-relaxed">
                   AI-powered, explainable scoring for the inVision U admissions committee.
                   Every score comes with reasoning. Every decision stays human.
                 </p>
@@ -119,10 +115,10 @@ export default function DashboardPage() {
                             {sc.totalScore}
                           </div>
                         </div>
-                        <div className="text-xs font-semibold text-white truncate w-full">
+                        <div className="text-xs font-semibold text-slate-800 truncate w-full">
                           {blindMode ? `Candidate #${sc.rank}` : sc.candidate.name}
                         </div>
-                        <div className="text-xs text-slate-400 mt-0.5">{sc.candidate.city}</div>
+                        <div className="text-xs text-slate-500 mt-0.5">{sc.candidate.city}</div>
                       </div>
                     </Link>
                   ))}
@@ -136,8 +132,8 @@ export default function DashboardPage() {
           {loading ? (
             <div className="flex items-center justify-center py-24">
               <div className="text-center">
-                <div className="w-12 h-12 rounded-full border-2 border-brand-500/30 border-t-brand-500 animate-spin mx-auto mb-4" />
-                <p className="text-slate-400 text-sm">Scoring candidates...</p>
+                <div className="w-12 h-12 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-4" />
+                <p className="text-slate-600 text-sm">Scoring candidates...</p>
               </div>
             </div>
           ) : (
@@ -156,16 +152,16 @@ export default function DashboardPage() {
                   style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)' }}>
                   <span className="text-2xl">🎭</span>
                   <div>
-                    <div className="text-purple-300 font-semibold text-sm">Blind Review Mode Active</div>
-                    <div className="text-slate-400 text-xs">Candidate names are hidden. Evaluate on merit alone.</div>
+                    <div className="text-purple-600 font-semibold text-sm">Blind Review Mode Active</div>
+                    <div className="text-slate-600 text-xs">Candidate names are hidden. Evaluate on merit alone.</div>
                   </div>
                 </div>
               )}
 
               {/* Candidate Table */}
               <div className="glass-card-static overflow-hidden mb-8 animate-fade-in-up delay-200">
-                <div className="px-6 py-4 flex items-center justify-between border-b border-white/5">
-                  <h2 className="font-display font-bold text-white text-lg">All Candidates</h2>
+                <div className="px-6 py-4 flex items-center justify-between border-b border-slate-200 bg-white">
+                  <h2 className="font-display font-bold text-slate-800 text-lg">Комиссия - Общий рейтинг</h2>
                   <Link href="/leaderboard" className="text-brand-400 text-sm hover:text-brand-300 transition-colors">
                     Full leaderboard →
                   </Link>
@@ -181,7 +177,7 @@ export default function DashboardPage() {
                         <th>Motivation</th>
                         <th>Growth Velocity</th>
                         <th>AI Risk</th>
-                        <th>Verdict</th>
+                        <th>AI Пред-скор</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -196,11 +192,11 @@ export default function DashboardPage() {
                               <span className="text-slate-400 font-mono text-xs">#{sc.rank}</span>
                             </td>
                             <td>
-                              <div className="font-semibold text-white text-sm">
+                              <div className="font-semibold text-slate-800 text-sm">
                                 {blindMode ? `Candidate #${sc.rank}` : sc.candidate.name}
                               </div>
                               {!blindMode && (
-                                <div className="text-xs text-slate-400">{sc.candidate.city} · {sc.candidate.age}y</div>
+                                <div className="text-xs text-slate-600">{sc.candidate.city} · {sc.candidate.age}y</div>
                               )}
                             </td>
                             <td>
@@ -208,7 +204,7 @@ export default function DashboardPage() {
                                 <span className="text-lg font-bold font-mono" style={{ color: getScoreColor(sc.totalScore) }}>
                                   {sc.totalScore}
                                 </span>
-                                <div className="w-16 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                <div className="w-16 h-1.5 rounded-full bg-slate-200 overflow-hidden">
                                   <div className="h-full rounded-full transition-all"
                                     style={{ width: `${sc.totalScore}%`, background: getScoreColor(sc.totalScore) }} />
                                 </div>
@@ -257,24 +253,24 @@ export default function DashboardPage() {
               {/* Bottom Feature Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in-up delay-300">
                 <Link href="/leaderboard">
-                  <div className="glass-card p-5 h-full">
+                  <div className="glass-card p-5 h-full bg-white">
                     <div className="text-2xl mb-3">⬡</div>
-                    <h3 className="font-display font-bold text-white mb-1">Full Leaderboard</h3>
-                    <p className="text-slate-400 text-sm">Sort, filter and compare all candidates with detailed dimension scores.</p>
+                    <h3 className="font-display font-bold text-slate-800 mb-1">Full Leaderboard</h3>
+                    <p className="text-slate-600 text-sm">Sort, filter and compare all candidates with detailed dimension scores.</p>
                   </div>
                 </Link>
                 <Link href="/upload">
-                  <div className="glass-card p-5 h-full">
+                  <div className="glass-card p-5 h-full bg-white">
                     <div className="text-2xl mb-3">↑</div>
-                    <h3 className="font-display font-bold text-white mb-1">Batch Upload</h3>
-                    <p className="text-slate-400 text-sm">Score an entire applicant pool by uploading a JSON or CSV file.</p>
+                    <h3 className="font-display font-bold text-slate-800 mb-1">Batch Upload</h3>
+                    <p className="text-slate-600 text-sm">Score an entire applicant pool by uploading a JSON or CSV file.</p>
                   </div>
                 </Link>
                 <Link href="/submit">
-                  <div className="glass-card p-5 h-full">
+                  <div className="glass-card p-5 h-full bg-white">
                     <div className="text-2xl mb-3">✦</div>
-                    <h3 className="font-display font-bold text-white mb-1">Live Scoring Preview</h3>
-                    <p className="text-slate-400 text-sm">See your score update in real-time as you fill in the application form.</p>
+                    <h3 className="font-display font-bold text-slate-800 mb-1">Live Scoring Preview</h3>
+                    <p className="text-slate-600 text-sm">See your score update in real-time as you fill in the application form.</p>
                   </div>
                 </Link>
               </div>

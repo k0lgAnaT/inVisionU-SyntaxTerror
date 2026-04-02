@@ -1,228 +1,69 @@
-# inVision U — AI Candidate Intelligence Platform
+# inVision U AI Admissions Platform
 
-> **Decentrathon 5.0** · Track: AI inDrive · Built for inVision U Admissions Committee
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Python-009688)](https://fastapi.tiangolo.com/)
+[![Decentrathon 5.0](https://img.shields.io/badge/Hackathon-Decentrathon_5.0-blue)](https://decentrathon.kz)
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38B2AC?logo=tailwind-css)](https://tailwindcss.com)
+**Интеллектуальная система поддержки отбора кандидатов в inVision U (AI inDrive Трек)**
 
----
+Данное решение представляет собой прозрачный (XAI), основанный на данных и NLP (Natural Language Processing) портал для приемной комиссии inVision U. Приложение призвано помочь комиссии быстро и непредвзято оценивать анкеты, мотивационные эссе и профили кандидатов, сохраняя за человеком право принятия окончательного решения (Human-in-the-loop).
 
-## 🎯 What It Does
+## 🏆 Ключевые возможности (Соответствие ТЗ)
 
-An AI-powered, **explainable** candidate scoring platform for inVision U's admissions committee. Instead of black-box decisions, every score comes with transparent reasoning — keeping humans in control.
-
-### Key Features
-
-| Feature | Description |
-|---|---|
-| **Multi-Dimensional Scoring** | 6 independent scores: Leadership, Motivation, Growth Trajectory, Communication, Growth Velocity, AI Usage |
-| **🎭 Blind Review Mode** | Toggle off candidate names for bias-free evaluation |
-| **🔥 AI Essay Heatmap** | Sentence-by-sentence highlight of AI-generated text signals |
-| **📈 Growth Velocity Score** | Evaluates trajectory speed, not just current achievements |
-| **💬 Smart Interview Questions** | AI generates targeted questions for each candidate's weak points |
-| **⚡ Live Scoring Preview** | Score updates in real-time as you type your application |
-| **📊 Batch Upload** | Score an entire applicant pool from a JSON file |
-| **🏆 Ranked Leaderboard** | Filterable, sortable with 4 scoring weight profiles |
+1. **Human-in-the-loop (Человек в цикле)**: ИИ не принимает решений, а выдает "Пред-скор". Итоговый вердикт утверждает член комиссии.
+2. **Многомодальный NLP-Анализ**: Детекция "Growth Velocity", лидерских качеств и мотивации через анализ англо- и русскоязычных мотивационных эссе. Оценивается не только общая успеваемость (GPA), но и траектория роста студента.
+3. **Объяснимый ИИ (Explainable AI - XAI)**: Радар профиля кандидата и прозрачное разбиение оценки на 5 факторов: *Лидерство, Мотивация, Скорость роста, Коммуникация и Вероятность ИИ-генерации (Burstiness)*.
+4. **Blind Review Mode (Слепой режим)**: Возможность скрывать имена, пол и возраст кандидатов для предотвращения любой неосознанной предвзятости (Fairness).
+5. **Baseline Comparison (Валидация ИИ)**: Отдельный дашборд валидации, доказывающий, что NLP-модель превосходит простые правила по отбору талантов (сравнение распределения скоринга, коэффициент Спирмена, анализ пограничных случаев).
+6. **Ролевой доступ и Мультиязычность**: Доступен интерфейс на RU, EN, KZ для Комиссии, Администратора и Студентов.
 
 ---
 
-## 🚀 Quick Start
+## 🛠 Архитектура
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
+Проект состоит из двух основных слоев:
+* **Frontend:** *Next.js 14, Tailwind CSS, TypeScript*. Отвечает за дашборды, загрузку данных, авторизацию и визуализацию аналитики.
+* **Backend Evaluation Engine:** *Python API*. Содержит NLP пайплайны (анализ читаемости Flesch, извлечение ключевых слов, анализ дисперсии метрик для выявления сгенерированного GPT текста).
 
-### Installation
+---
+
+## 🚀 Запуск проекта (Installation Guide)
+
+### Предварительные требования
+* Node.js v18+
+* Python 3.9+ (для развертывания NLP микросервиса если он отвязан)
+
+### 1. Запуск Frontend (Дашборд и UI)
 
 ```bash
-# Clone the repository
-git clone https://github.com/Alikkkhx/invision-u-ai.git
-cd invision-u-ai
+# Перейдите в корневую директорию проекта
+cd invision
 
-# Install dependencies
+# Установите зависимости
 npm install
 
-# Start development server
+# Запустите сервер разработки
 npm run dev
 ```
+После запуска проект будет доступен по адресу: `http://localhost:3000`
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Optional: Gemini AI Integration
-
-For enhanced LLM-powered scoring, add a Gemini API key:
-
-```bash
-# Create .env.local
-echo "GEMINI_API_KEY=your_key_here" > .env.local
-```
-
-The system works fully in **heuristic-only mode** without an API key.
+### 2. Структура проекта (Навигация)
+* `/` - Главный Дашборд комиссии.
+* `/candidates/[id]` - Подробный профиль кандидата с XAI объяснением оценок.
+* `/leaderboard` - Общий рейтинг с фильтрами и профилями сортировки.
+* `/validation` - Отчет об эффективности NLP модели в сравнении с жесткими правилами (Baseline).
+* `/upload` - Массовый скоринг кандидатов (JSON/CSV загрузка).
+* `/submit` - Демонстрационная подача заявки с обновлением оценки ИИ в реальном времени.
 
 ---
 
-## 📁 Project Structure
+## 🔒 Безопасность и Этические Ограничения (Fairness & Privacy)
 
-```
-src/
-├── app/
-│   ├── page.tsx                    # Main dashboard
-│   ├── leaderboard/page.tsx        # Full ranked leaderboard
-│   ├── candidates/[id]/page.tsx    # Candidate deep-dive
-│   ├── submit/page.tsx             # Live scoring preview
-│   ├── upload/page.tsx             # Batch upload & scoring
-│   └── api/
-│       ├── candidates/route.ts     # GET all / POST one
-│       ├── candidates/[id]/route.ts
-│       └── score/route.ts          # Batch scoring endpoint
-├── components/
-│   └── Navbar.tsx
-├── lib/
-│   ├── scoring/
-│   │   └── engine.ts               # Core scoring engine
-│   └── utils.ts
-├── data/
-│   └── candidates.json             # 12 synthetic demo candidates
-└── types/
-    └── index.ts
-```
+Мы строго соблюдаем требования ТЗ:
+- **Никаких "Черных ящиков"**: Мы используем детерминированные алгоритмы, статический NLP-анализ и формулы весов, а не "скормленные LLM" данные.
+- **Детекция LLM Без Дискриминации**: Модель помечает текст с низкой дисперсией длины предложений как `AI Risk (Флаг)`, стимулируя комиссию задать дополнительные вопросы, но не отклоняет заявку автоматически.
+- **Обезличивание**: В режиме комиссии можно активировать слепой скоринг. 
+- **Privacy First**: Данные не отправляются в открытые генеративные сети, обработка текста происходит локализованными методами.
 
----
-
-## 🧠 Scoring Methodology
-
-### Dimensions
-
-| Dimension | Weight (Default) | Description |
-|---|---|---|
-| Leadership Potential | 28% | Initiative signals, organizing, founding, leading |
-| Motivation & Authenticity | 22% | Mission-driven language, specific goals, passion |
-| Growth Trajectory | 20% | Resilience, adversity narrative, progress markers |
-| Communication Clarity | 15% | Vocabulary richness, readability, essay structure |
-| Growth Velocity | 15% | Achievement rate relative to age and context |
-| AI Usage (penalty) | -8–12% | Burstiness analysis + AI phrase detection |
-
-### Weight Profiles
-
-Administrators can switch between 4 pre-configured weight profiles:
-- **Balanced** (default) — equal priority
-- **Leadership Focus** — 40% leadership weight
-- **Authenticity Focus** — 35% motivation weight  
-- **Growth Potential** — 30% velocity weight
-
-### AI Usage Detection
-
-The heuristic AI detector uses:
-1. **Phrase matching** — 20+ known AI-generation clichés
-2. **Sentence burstiness** — low coefficient of variation = suspicious
-3. **Average sentence length** — very long = possibly AI
-
-**Important**: AI suspicion is advisory only, never automatically disqualifying.
-
----
-
-## 🔒 Ethics & Fairness
-
-- **No demographic scoring**: Name, gender, city, school prestige are NOT used in scoring
-- **Explainable AI**: Every score has a text explanation — no black boxes
-- **Human-in-the-loop**: Recommendations are suggestions; committee decides
-- **AI advisory only**: AI usage suspicion never auto-rejects a candidate
-- **Blind Review Mode**: Optional anonymization for bias-free review sessions
-
----
-
-## 📊 API Reference
-
-### `GET /api/candidates?profile=default`
-Returns all 12 demo candidates scored and ranked.
-
-### `POST /api/candidates`
-Score a single candidate.
-```json
-{
-  "candidate": { "name": "...", "essay": "...", ... },
-  "profile": "default"
-}
-```
-
-### `POST /api/score`
-Batch score multiple candidates.
-```json
-{
-  "candidates": [...],
-  "profile": "default"
-}
-```
-
----
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + custom glassmorphism design system
-- **Charts**: Recharts (Radar + Bar charts)
-- **AI**: Heuristic NLP engine (Gemini-ready via API routes)
-- **Data**: JSON (easily swappable with Supabase/PostgreSQL)
-- **Deploy**: Vercel-ready
-
----
-
-## 📋 Candidate Data Schema
-
-```typescript
-interface Candidate {
-  id: string;
-  name: string;
-  age: number;
-  city: string;
-  school: string;
-  gpa: number;           // 0–5
-  submittedAt: string;   // ISO date
-  essay: string;         // Main motivation essay
-  experience: string[];  // List of experiences
-  achievements: string[];
-  languages: string[];
-  socialLinks: Record<string, string>;
-  videoStatement: boolean;
-  references: number;
-  extracurricular: string;
-}
-```
-
----
-
-## 🚀 Deployment (Vercel)
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel --prod
-```
-
-Or connect your GitHub repo to [vercel.com](https://vercel.com) for automatic deployments.
-
----
-
-## ⚠️ Limitations & Known Risks
-
-1. **No real training data**: Scoring weights are heuristic — not trained on actual admission outcomes
-2. **Essay language bias**: English essays may score slightly higher due to keyword lists; Russian/Kazakh lists are curated but may miss nuance
-3. **AI detection is probabilistic**: False positives possible for students who naturally write formal text
-4. **No persistent storage**: Committee decisions are session-only (add a database for production)
-5. **Gemini integration**: LLM-powered scoring requires API key and incurs costs at scale
-
----
-
-## 👥 Team
-
-Built for **Decentrathon 5.0** — AI inDrive Track
-
----
-
-## 📄 License
-
-MIT — Free to use, modify, and deploy.
+## 👥 Команда
+Разработано в рамках хакатона Decentrathon 5.0 для трека inDrive (AI inDrive).

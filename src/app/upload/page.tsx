@@ -105,10 +105,10 @@ export default function UploadPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
           <div className="mb-8 animate-fade-in-up">
-            <h1 className="text-3xl font-display font-bold text-white mb-1">
+            <h1 className="text-3xl font-display font-bold text-slate-800 mb-1">
               Batch <span className="gradient-text">Upload & Score</span>
             </h1>
-            <p className="text-slate-400 text-sm">Upload a JSON file of candidates and score the entire pool at once.</p>
+            <p className="text-slate-600 text-sm">Upload a JSON file of candidates and score the entire pool at once.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -129,8 +129,8 @@ export default function UploadPage() {
                 onClick={() => document.getElementById('fileInput')?.click()}
               >
                 <div className="text-4xl mb-3">{dragOver ? '📂' : '📁'}</div>
-                <div className="text-white font-semibold mb-1">Drop JSON file here</div>
-                <div className="text-slate-400 text-sm">or click to browse</div>
+                <div className="text-slate-700 font-semibold mb-1">Drop JSON file here</div>
+                <div className="text-slate-500 text-sm">or click to browse</div>
                 <input
                   id="fileInput"
                   type="file"
@@ -142,7 +142,7 @@ export default function UploadPage() {
 
               {/* Profile Selector */}
               <div className="glass-card-static p-4">
-                <label className="text-xs text-slate-400 font-medium mb-2 block">Scoring Profile</label>
+                <label className="text-xs text-slate-600 font-medium mb-2 block">Scoring Profile</label>
                 <select value={profile} onChange={e => setProfile(e.target.value)} className="input-field">
                   <option value="default">Balanced (Default)</option>
                   <option value="leadership">Leadership Focus</option>
@@ -154,7 +154,7 @@ export default function UploadPage() {
               {/* JSON Editor */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-semibold text-white">JSON Data</label>
+                  <label className="text-sm font-semibold text-slate-800">JSON Data</label>
                   <button onClick={() => setJsonText(SAMPLE_JSON)} className="text-xs text-brand-400 hover:text-brand-300 transition-colors">
                     Load Sample →
                   </button>
@@ -191,7 +191,7 @@ export default function UploadPage() {
               {!results.length && !loading && (
                 <div className="glass-card p-10 text-center h-full flex flex-col items-center justify-center">
                   <div className="text-5xl mb-4 opacity-20">📊</div>
-                  <p className="text-slate-400 text-sm">Batch results will appear here after scoring.</p>
+                  <p className="text-slate-600 text-sm">Batch results will appear here after scoring.</p>
                   <button onClick={() => setJsonText(SAMPLE_JSON)}
                     className="mt-4 text-xs text-brand-400 hover:text-brand-300 transition-colors">
                     Load sample data →
@@ -201,22 +201,22 @@ export default function UploadPage() {
 
               {loading && (
                 <div className="glass-card p-10 text-center">
-                  <div className="w-12 h-12 rounded-full border-2 border-brand-500/30 border-t-brand-500 animate-spin mx-auto mb-4" />
-                  <p className="text-slate-400">Scoring candidates...</p>
+                  <div className="w-12 h-12 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-4" />
+                  <p className="text-slate-600">Scoring candidates...</p>
                 </div>
               )}
 
               {results.length > 0 && !loading && (
                 <div className="space-y-3">
                   {/* Summary */}
-                  <div className="glass-card-static p-4 flex items-center justify-between">
+                  <div className="glass-card-static p-4 flex items-center justify-between border border-slate-200">
                     <div>
-                      <span className="text-white font-semibold">{results.length} candidates</span>
-                      <span className="text-slate-400 text-sm ml-2">scored</span>
+                      <span className="text-slate-800 font-semibold">{results.length} candidates</span>
+                      <span className="text-slate-600 text-sm ml-2">scored</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="text-sm text-slate-400">
-                        Avg: <span className="text-white font-mono font-bold">
+                      <div className="text-sm text-slate-600">
+                        Avg: <span className="text-slate-800 font-mono font-bold">
                           {Math.round(results.reduce((a, r) => a + r.totalScore, 0) / results.length)}
                         </span>
                       </div>
@@ -229,12 +229,12 @@ export default function UploadPage() {
                   {/* Results list */}
                   <div className="space-y-2 max-h-[600px] overflow-y-auto">
                     {results.map((r, i) => (
-                      <div key={i} className="glass-card p-4 flex items-center gap-4 animate-fade-in"
+                      <div key={i} className="glass-card p-4 flex items-center gap-4 animate-fade-in border border-slate-200"
                         style={{ animationDelay: `${i * 0.08}s` }}>
-                        <div className="text-slate-400 font-mono text-sm w-8 flex-shrink-0">#{r.rank}</div>
+                        <div className="text-slate-500 font-mono text-sm w-8 flex-shrink-0">#{r.rank}</div>
                         <div className="flex-1 min-w-0">
-                          <div className="font-semibold text-white text-sm truncate">{r.candidate.name}</div>
-                          <div className="text-xs text-slate-400">{r.candidate.city}</div>
+                          <div className="font-semibold text-slate-800 text-sm truncate">{r.candidate.name}</div>
+                          <div className="text-xs text-slate-500">{r.candidate.city}</div>
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="text-right">

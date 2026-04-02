@@ -52,8 +52,8 @@ function MetricCard({ label, value, sub, color, hint }: {
   return (
     <div className="glass-card p-5" title={hint}>
       <div className="text-3xl font-display font-bold mb-1" style={{ color: color || '#6088ff' }}>{value}</div>
-      <div className="text-white font-semibold text-sm">{label}</div>
-      {sub && <div className="text-slate-400 text-xs mt-0.5">{sub}</div>}
+      <div className="text-slate-800 font-semibold text-sm">{label}</div>
+      {sub && <div className="text-slate-500 text-xs mt-0.5">{sub}</div>}
     </div>
   );
 }
@@ -78,8 +78,8 @@ export default function ValidationPage() {
       <Navbar />
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-10 h-10 rounded-full border-2 border-brand-500/30 border-t-brand-500 animate-spin mx-auto mb-3" />
-          <p className="text-slate-400 text-sm">Running model validation...</p>
+          <div className="w-10 h-10 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-3" />
+          <p className="text-slate-600 text-sm">Running model validation...</p>
         </div>
       </div>
     </>
@@ -128,7 +128,7 @@ export default function ValidationPage() {
           {/* Header */}
           <div className="mb-8 animate-fade-in-up">
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-display font-bold text-white">
+              <h1 className="text-3xl font-display font-bold text-slate-800">
                 Model <span className="gradient-text">Validation</span> Report
               </h1>
               <span className="px-2 py-1 rounded-lg text-xs font-mono"
@@ -138,9 +138,9 @@ export default function ValidationPage() {
                 {source === 'python_nlp' ? '🐍 Python NLP' : '⚡ TS Engine'}
               </span>
             </div>
-            <p className="text-slate-400 text-sm max-w-2xl">
-              Statistical comparison of our <strong className="text-white">Advanced NLP Model</strong> vs a simple
-              <strong className="text-white"> Rule-Based Baseline</strong>. This validates that our system provides
+            <p className="text-slate-600 text-sm max-w-2xl">
+              Statistical comparison of our <strong className="text-slate-800">Advanced NLP Model</strong> vs a simple
+              <strong className="text-slate-800"> Rule-Based Baseline</strong>. This validates that our system provides
               meaningful signal beyond raw GPA/experience counts.
             </p>
           </div>
@@ -179,8 +179,8 @@ export default function ValidationPage() {
 
             {/* Score Distribution Comparison */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
-              <h3 className="font-display font-bold text-white mb-1">Score Distribution: Advanced vs Baseline</h3>
-              <p className="text-slate-400 text-xs mb-4">
+              <h3 className="font-display font-bold text-slate-800 mb-1">Score Distribution: Advanced vs Baseline</h3>
+              <p className="text-slate-600 text-xs mb-4">
                 Our model produces higher variance (more discrimination) and shifts scores based on NLP signals, not just counts.
               </p>
               <div className="h-52">
@@ -202,8 +202,8 @@ export default function ValidationPage() {
 
             {/* Recommendation Distribution */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
-              <h3 className="font-display font-bold text-white mb-1">Verdict Distribution</h3>
-              <p className="text-slate-400 text-xs mb-4">
+              <h3 className="font-display font-bold text-slate-800 mb-1">Verdict Distribution</h3>
+              <p className="text-slate-600 text-xs mb-4">
                 How the advanced model classifies the 12 demo candidates across recommendation tiers.
               </p>
               <div className="h-52">
@@ -230,8 +230,8 @@ export default function ValidationPage() {
 
             {/* Dimension Statistics */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
-              <h3 className="font-display font-bold text-white mb-1">Per-Dimension Score Stats</h3>
-              <p className="text-slate-400 text-xs mb-4">Mean ± Std across all 12 candidates for each scoring dimension.</p>
+              <h3 className="font-display font-bold text-slate-800 mb-1">Per-Dimension Score Stats</h3>
+              <p className="text-slate-600 text-xs mb-4">Mean ± Std across all 12 candidates for each scoring dimension.</p>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dimChartData}>
@@ -252,7 +252,7 @@ export default function ValidationPage() {
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="text-slate-400 border-b border-white/5">
+                    <tr className="text-slate-500 border-b border-slate-200">
                       <th className="text-left pb-2 pr-3">Dimension</th>
                       <th className="text-right pb-2 pr-3">Mean</th>
                       <th className="text-right pb-2 pr-3">Median</th>
@@ -261,11 +261,11 @@ export default function ValidationPage() {
                   </thead>
                   <tbody>
                     {Object.entries(data.dimension_statistics).map(([key, stats]) => (
-                      <tr key={key} className="border-b border-white/3">
-                        <td className="py-1.5 pr-3 text-slate-300">{DIM_LABELS[key] || key}</td>
-                        <td className="py-1.5 pr-3 text-right font-mono text-white">{stats.mean}</td>
-                        <td className="py-1.5 pr-3 text-right font-mono text-white">{stats.median}</td>
-                        <td className="py-1.5 text-right font-mono text-slate-400">{stats.std}</td>
+                      <tr key={key} className="border-b border-slate-100">
+                        <td className="py-1.5 pr-3 text-slate-700">{DIM_LABELS[key] || key}</td>
+                        <td className="py-1.5 pr-3 text-right font-mono text-slate-800">{stats.mean}</td>
+                        <td className="py-1.5 pr-3 text-right font-mono text-slate-800">{stats.median}</td>
+                        <td className="py-1.5 text-right font-mono text-slate-500">{stats.std}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -275,8 +275,8 @@ export default function ValidationPage() {
 
             {/* Radar: Avg Profile */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
-              <h3 className="font-display font-bold text-white mb-1">Average Candidate Profile</h3>
-              <p className="text-slate-400 text-xs mb-3">Mean scores across all dimensions — shows which areas the cohort is strongest in.</p>
+              <h3 className="font-display font-bold text-slate-800 mb-1">Average Candidate Profile</h3>
+              <p className="text-slate-600 text-xs mb-3">Mean scores across all dimensions — shows which areas the cohort is strongest in.</p>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData}>
@@ -295,8 +295,8 @@ export default function ValidationPage() {
           {/* Edge Cases */}
           {data.edge_cases.length > 0 && (
             <div className="glass-card-static p-5 mb-6 animate-fade-in-up delay-400">
-              <h3 className="font-display font-bold text-white mb-1">Edge Cases — Model Disagreements</h3>
-              <p className="text-slate-400 text-xs mb-4">
+              <h3 className="font-display font-bold text-slate-800 mb-1">Edge Cases — Model Disagreements</h3>
+              <p className="text-slate-600 text-xs mb-4">
                 Candidates where Advanced NLP and Baseline models differ by ≥15 points.
                 These cases validate that our model captures signal invisible to simple rules.
               </p>
@@ -315,12 +315,12 @@ export default function ValidationPage() {
                   <tbody>
                     {data.edge_cases.map((ec, i) => (
                       <tr key={i}>
-                        <td className="font-semibold text-white">{ec.candidate_name}</td>
+                        <td className="font-semibold text-slate-800">{ec.candidate_name}</td>
                         <td>
-                          <span className="font-mono font-bold text-brand-400">{ec.advanced_score}</span>
+                          <span className="font-mono font-bold text-brand-600">{ec.advanced_score}</span>
                         </td>
                         <td>
-                          <span className="font-mono text-slate-400">{ec.baseline_score}</span>
+                          <span className="font-mono text-slate-500">{ec.baseline_score}</span>
                         </td>
                         <td>
                           <span className="font-mono font-bold" style={{
@@ -333,13 +333,13 @@ export default function ValidationPage() {
                           <span className="text-xs px-2 py-0.5 rounded-full"
                             style={{
                               background: ec.direction === 'advanced_higher' ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)',
-                              color: ec.direction === 'advanced_higher' ? '#34d399' : '#f87171',
+                              color: ec.direction === 'advanced_higher' ? '#059669' : '#dc2626',
                               border: ec.direction === 'advanced_higher' ? '1px solid rgba(52,211,153,0.3)' : '1px solid rgba(248,113,113,0.3)',
                             }}>
                             {ec.direction === 'advanced_higher' ? 'NLP ↑' : 'Baseline ↑'}
                           </span>
                         </td>
-                        <td className="text-xs text-slate-400 max-w-xs">{ec.likely_reason}</td>
+                        <td className="text-xs text-slate-500 max-w-xs">{ec.likely_reason}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -350,36 +350,36 @@ export default function ValidationPage() {
 
           {/* Methodology */}
           <div className="glass-card-static p-6 animate-fade-in-up delay-500">
-            <h3 className="font-display font-bold text-white mb-4">Scoring Methodology</h3>
+            <h3 className="font-display font-bold text-slate-800 mb-4">Scoring Methodology</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="text-sm font-semibold text-brand-300 mb-2">Advanced NLP Model (Our System)</h4>
-                <ul className="space-y-1 text-sm text-slate-300">
-                  <li className="flex items-start gap-2"><span className="text-brand-400 mt-0.5">→</span>Flesch reading ease & vocabulary richness (RTTR)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-400 mt-0.5">→</span>Bilingual keyword density (EN + RU leadership/motivation/growth)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-400 mt-0.5">→</span>Sentence burstiness (AI detection via variance analysis)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-400 mt-0.5">→</span>Essay specificity (numbers, scale, results detection)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-400 mt-0.5">→</span>Age-adjusted growth velocity score</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-400 mt-0.5">→</span>Multi-signal AI phrase detection (20+ clichés)</li>
+                <h4 className="text-sm font-semibold text-brand-600 mb-2">Advanced NLP Model (Our System)</h4>
+                <ul className="space-y-1 text-sm text-slate-700">
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Flesch reading ease & vocabulary richness (RTTR)</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Bilingual keyword density (EN + RU leadership/motivation/growth)</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Sentence burstiness (AI detection via variance analysis)</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Essay specificity (numbers, scale, results detection)</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Age-adjusted growth velocity score</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Multi-signal AI phrase detection (20+ clichés)</li>
                 </ul>
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-slate-400 mb-2">Baseline (Simple Rules)</h4>
-                <ul className="space-y-1 text-sm text-slate-400">
-                  <li className="flex items-start gap-2"><span className="text-slate-600 mt-0.5">→</span>GPA / 5.0 × 100</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-600 mt-0.5">→</span>Experience count × 12</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-600 mt-0.5">→</span>Achievement count × 18</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-600 mt-0.5">→</span>Essay word count ÷ 3</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-600 mt-0.5">→</span><em>No NLP, no semantic analysis</em></li>
+                <h4 className="text-sm font-semibold text-slate-600 mb-2">Baseline (Simple Rules)</h4>
+                <ul className="space-y-1 text-sm text-slate-500">
+                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>GPA / 5.0 × 100</li>
+                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>Experience count × 12</li>
+                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>Achievement count × 18</li>
+                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>Essay word count ÷ 3</li>
+                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span><em>No NLP, no semantic analysis</em></li>
                 </ul>
 
                 <div className="mt-4 p-3 rounded-lg text-xs"
-                  style={{ background: 'rgba(59,92,255,0.08)', border: '1px solid rgba(59,92,255,0.2)' }}>
-                  <div className="text-brand-300 font-semibold mb-1">Improvement over baseline:</div>
-                  <div className="text-slate-400">
+                  style={{ background: 'rgba(213,245,79,0.15)', border: '1px solid rgba(213,245,79,0.5)' }}>
+                  <div className="text-brand-700 font-semibold mb-1">Improvement over baseline:</div>
+                  <div className="text-slate-700">
                     Our model catches candidates with strong potential but modest credentials (e.g. Малика Нурлан),
                     and penalizes hollow essays regardless of GPA.
-                    Spearman ρ = <strong className="text-white">{spearman.toFixed(3)}</strong> — models partially agree
+                    Spearman ρ = <strong className="text-slate-900">{spearman.toFixed(3)}</strong> — models partially agree
                     but diverge meaningfully on borderline cases.
                   </div>
                 </div>

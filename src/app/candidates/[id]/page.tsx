@@ -116,7 +116,7 @@ export default function CandidatePage() {
 
   return (
     <>
-      <Navbar blindMode={blindMode} onBlindToggle={() => setBlindMode(!blindMode)} />
+      <Navbar />
 
       <main className="min-h-screen pt-20 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
@@ -134,6 +134,20 @@ export default function CandidatePage() {
 
             {/* LEFT: Profile Card */}
             <div className="lg:col-span-1 flex flex-col gap-4">
+
+              {/* Security Alerts */}
+              {sc.securityFlags && sc.securityFlags.length > 0 && (
+                <div className="p-5 rounded-2xl animate-fade-in-up" style={{ background: '#fef2f2', border: '2px solid #fca5a5' }}>
+                  <h3 className="text-sm font-bold text-red-700 uppercase tracking-wider mb-2">🚨 Critical Security Alert</h3>
+                  <div className="flex flex-col gap-2">
+                    {sc.securityFlags.map((sf, i) => (
+                      <div key={i} className="text-sm text-red-600 font-medium bg-red-100/50 p-2 rounded-lg">
+                        {sf}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Profile Header */}
               <div className="glass-card p-6 animate-fade-in-up">
@@ -173,6 +187,7 @@ export default function CandidatePage() {
                 </div>
 
                 {/* Recommendation */}
+                <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider text-center mt-4 mb-2">AI Рекомендация</div>
                 <div className={`text-center py-2 rounded-xl font-semibold text-sm ${getRecommendationBadgeClass(sc.shortlistRecommendation)}`}>
                   {getRecommendationLabel(sc.shortlistRecommendation)}
                 </div>
@@ -219,9 +234,10 @@ export default function CandidatePage() {
               )}
 
               {/* Committee Decision */}
-              <div className="glass-card p-5 animate-fade-in-up delay-300">
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
-                  Committee Decision <span className="text-brand-400">(Human in the Loop)</span>
+              <div className="glass-card p-5 animate-fade-in-up delay-300 border-2 border-brand-400 relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-brand-400 text-black px-3 py-1 rounded-bl-lg text-xs font-bold">Обязательно</div>
+                <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3">
+                  Финальный вердикт комиссии <span className="text-brand-600">(Human)</span>
                 </h3>
                 <div className="flex gap-2 mb-3">
                   {(['shortlist', 'hold', 'pass'] as const).map(d => (

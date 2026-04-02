@@ -36,6 +36,7 @@ export interface ScoredCandidate {
   totalScore: number;
   rank?: number;
   flags: string[];
+  securityFlags: string[];
   shortlistRecommendation: 'STRONG_YES' | 'YES' | 'MAYBE' | 'NO';
   smartQuestions: string[];
   cohortPercentile?: number;
