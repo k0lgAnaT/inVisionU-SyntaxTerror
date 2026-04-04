@@ -24,12 +24,21 @@ export function getScoreBarClass(score: number): string {
   return 'score-bar-weak';
 }
 
-export function getRecommendationLabel(rec: ScoredCandidate['shortlistRecommendation']): string {
+export function getRecommendationLabel(rec: ScoredCandidate['shortlistRecommendation'], t?: any): string {
+  if (t) {
+    const map = {
+      STRONG_YES: t('lead_verdict_strong_yes'),
+      YES: t('lead_verdict_yes'),
+      MAYBE: t('lead_verdict_maybe'),
+      NO: t('lead_verdict_no'),
+    };
+    return map[rec] || rec;
+  }
   const map = {
-    STRONG_YES: '✅ Strong Yes',
-    YES: '👍 Yes',
-    MAYBE: '🤔 Maybe',
-    NO: '❌ No',
+    STRONG_YES: 'Strong Yes',
+    YES: 'Yes',
+    MAYBE: 'Maybe',
+    NO: 'No',
   };
   return map[rec];
 }

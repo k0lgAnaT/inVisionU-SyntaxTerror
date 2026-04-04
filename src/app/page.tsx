@@ -1,310 +1,134 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import { ScoredCandidate } from '@/types';
-import { getScoreColor, getRecommendationLabel, getRecommendationBadgeClass } from '@/lib/utils';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
-
-function StatCard({ value, label, sub, color }: { value: string | number; label: string; sub?: string; color?: string }) {
-  return (
-    <div className="glass-card p-5 flex flex-col gap-1">
-      <div className="text-3xl font-display font-bold" style={{ color: color || 'var(--tw-colors-brand-600)' }}>{value}</div>
-      <div className="text-slate-800 dark:text-white font-semibold text-sm">{label}</div>
-      {sub && <div className="text-slate-500 dark:text-slate-400 text-xs">{sub}</div>}
-    </div>
-  );
-}
-
-function ScoreRing({ score, size = 80, children }: { score: number; size?: number; children?: React.ReactNode }) {
-  const r = (size - 12) / 2;
-  const circ = 2 * Math.PI * r;
-  const progress = (score / 100) * circ;
-  const color = getScoreColor(score);
-
-  return (
-    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }} className="absolute">
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(148,163,184,0.15)" strokeWidth="6" />
-        <circle
-          cx={size / 2} cy={size / 2} r={r}
-          fill="none"
-          stroke={color}
-          strokeWidth="6"
-          strokeDasharray={`${progress} ${circ}`}
-          strokeLinecap="round"
-          style={{ transition: 'stroke-dasharray 1s ease-in-out' }}
-        />
-      </svg>
-      <div className="z-10">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-export default function DashboardPage() {
-  const [candidates, setCandidates] = useState<ScoredCandidate[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [blindMode, setBlindMode] = useState(false);
+import Navbar from '@/components/Navbar';
+export default function LandingPage() {
   const { t } = useLanguage();
 
-  useEffect(() => {
-    // 🛡️ AUTH GUARD
-    const role = localStorage.getItem('userRole');
-    if (!role) {
-      window.location.href = '/login';
-      return;
+  const features = [
+    { 
+      icon: '🧠', 
+      title: t('landing_features_ai'), 
+      desc: t('landing_features_ai_sub'),
+      color: 'text-brand-600',
+      bg: 'bg-brand-50'
+    },
+    { 
+      icon: '🛡️', 
+      title: t('landing_features_fair'), 
+      desc: t('landing_features_fair_sub'),
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-50'
+    },
+    { 
+      icon: '📊', 
+      title: t('landing_features_xai'), 
+      desc: t('landing_features_xai_sub'),
+      color: 'text-amber-600',
+      bg: 'bg-amber-50'
     }
-
-    fetch('/api/candidates')
-      .then(r => r.json())
-      .then(d => {
-        const apiData = d.data || [];
-        const localData = JSON.parse(localStorage.getItem('demo_submissions') || '[]');
-        setCandidates([...localData, ...apiData]);
-        setLoading(false);
-      });
-  }, []);
-
-  const shortlisted = candidates.filter(c => c.shortlistRecommendation === 'STRONG_YES' || c.shortlistRecommendation === 'YES');
-  const flagged = candidates.filter(c => c.flags.some(f => f.includes('AI')));
-  const avgScore = candidates.length ? Math.round(candidates.reduce((a, c) => a + c.totalScore, 0) / candidates.length) : 0;
-  const top3 = candidates.slice(0, 3);
+  ];
 
   return (
-    <>
+    <div className="min-h-screen bg-background overflow-hidden selection:bg-brand-100 selection:text-brand-900">
       <Navbar />
+      
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10 opacity-30">
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-brand-200/40 blur-[120px] rounded-full animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-slate-200/40 blur-[120px] rounded-full"></div>
+      </div>
 
-      <main className="min-h-screen pt-16">
-        {/* Hero Banner */}
-        <div className="relative overflow-hidden bg-brand-50 dark:bg-[#0b0e1e] border-b border-brand-100 dark:border-brand-900/30">
-          {/* Animated orbs */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-10 left-1/4 w-72 h-72 rounded-full opacity-10 animate-pulse-slow"
-              style={{ background: 'radial-gradient(circle, #3b5cff 0%, transparent 70%)' }} />
-            <div className="absolute top-5 right-1/4 w-56 h-56 rounded-full opacity-8"
-              style={{ background: 'radial-gradient(circle, #7c3aed 0%, transparent 70%)', animationDelay: '2s' }} />
-          </div>
+      <main className="pt-24 pb-16 px-4 max-w-7xl mx-auto">
+        {/* Hero Section */}
+        <div className="flex flex-col items-center text-center mb-20">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1 bg-brand-50 border border-brand-100 rounded-full text-brand-700 text-xs font-bold mb-6 tracking-tight"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+            </span>
+            {t('nav_api_online')}
+          </motion.div>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 relative">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-              <div className="animate-fade-in-up">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300 border border-brand-200 dark:border-brand-800/50">
-                    Decentrathon 5.0 · AI inDrive Track
-                  </span>
-                </div>
-                <h1 className="text-4xl lg:text-5xl font-display font-bold text-slate-800 dark:text-white mb-3 leading-tight">
-                  Candidate <span className="gradient-text">Intelligence v2.0</span>
-                  <br />Platform
-                </h1>
-                <p className="text-slate-600 dark:text-slate-300 text-base max-w-lg leading-relaxed">
-                  AI-powered, explainable scoring for the inVision U admissions committee.
-                  Every score comes with reasoning. Every decision stays human.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center gap-3 mt-8">
-                  <Link href="/leaderboard" className="btn-primary w-full sm:w-auto text-center">
-                    View Leaderboard →
-                  </Link>
-                    <Link href="/submit" className="btn-secondary w-full sm:w-auto text-center">
-                      Test Submission
-                    </Link>
-                    <button 
-                      onClick={() => setBlindMode(!blindMode)}
-                      className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all border flex items-center justify-center gap-2 w-full sm:w-auto ${
-                        blindMode 
-                          ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20' 
-                          : 'bg-white/10 border-white/20 text-slate-800 dark:text-white hover:bg-white/20'
-                      }`}
-                    >
-                      {blindMode ? '🎭 ' + t('lead_blind_mode') : '👁️ Show Names'}
-                    </button>
-                  </div>
-                </div>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-display font-black text-slate-900 dark:text-white mb-6 leading-[1.1]"
+          >
+            {t('landing_hero_title')}
+          </motion.h1>
 
-              {/* Top 3 mini cards - Responsive Grid/Flex */}
-              {!loading && (
-                <div className="w-full lg:w-auto flex flex-wrap justify-center lg:justify-start gap-4 animate-fade-in-up delay-200">
-                  {top3.map((sc, i) => (
-                    <Link key={sc.candidate.id} href={`/candidates/${sc.candidate.id}`}>
-                      <div
-                        className="glass-card p-4 w-full sm:w-40 flex flex-col items-center text-center cursor-pointer hover:-translate-y-1 transition-transform relative"
-                        style={i === 0 ? { borderColor: 'rgba(251,191,36,0.4)', boxShadow: '0 0 20px rgba(251,191,36,0.15)' } : {}}
-                      >
-                        {i === 0 && <div className="text-lg mb-1">🏆</div>}
-                        {i === 1 && <div className="text-base mb-1">🥈</div>}
-                        {i === 2 && <div className="text-base mb-1">🥉</div>}
-                        <div className="mb-4">
-                          <ScoreRing score={sc.totalScore} size={68}>
-                            <span className="text-xl font-bold font-mono tracking-tighter" style={{ color: getScoreColor(sc.totalScore) }}>
-                              {sc.totalScore}
-                            </span>
-                          </ScoreRing>
-                        </div>
-                        <div className="text-xs font-semibold text-slate-800 dark:text-white truncate w-full">
-                          {blindMode ? `Candidate #${sc.rank}` : sc.candidate.name}
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{sc.candidate.city}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-10 leading-relaxed"
+          >
+            {t('landing_hero_sub')}
+          </motion.p>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-4 w-full justify-center"
+          >
+            <Link 
+              href="/register" 
+              className="group relative px-8 py-4 bg-brand-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-brand-200/50 hover:bg-brand-700 hover:-translate-y-1 transition-all overflow-hidden"
+            >
+              <div className="relative z-10 flex items-center justify-center gap-2">
+                <span>👤</span>
+                {t('landing_apply_btn')}
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            </Link>
+
+            <Link 
+              href="/login" 
+              className="px-8 py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-700 rounded-2xl font-bold text-lg hover:bg-slate-50 dark:hover:bg-slate-700 hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
+            >
+              <span>🔑</span>
+              {t('landing_staff_btn')}
+            </Link>
+          </motion.div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          {loading ? (
-            <div className="flex items-center justify-center py-24">
-              <div className="text-center">
-                <div className="w-12 h-12 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-4" />
-                <p className="text-slate-600 dark:text-slate-400 text-sm">Scoring candidates...</p>
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24">
+          {features.map((feature, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="glass-card p-8 group hover:border-brand-200 transition-colors"
+            >
+              <div className={`w-12 h-12 ${feature.bg} ${feature.color} flex items-center justify-center rounded-xl text-2xl mb-6 group-hover:scale-110 transition-transform`}>
+                {feature.icon}
               </div>
-            </div>
-          ) : (
-            <>
-              {/* Stats Row */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 animate-fade-in-up delay-100">
-                <StatCard value={candidates.length} label="Total Applicants" sub="This cycle" color="#6088ff" />
-                <StatCard value={shortlisted.length} label="Shortlisted" sub="Strong Yes + Yes" color="#34d399" />
-                <StatCard value={`${avgScore}`} label="Average Score" sub="Pool median" color="#fbbf24" />
-                <StatCard value={flagged.length} label="AI Flagged" sub="Needs review" color="#f87171" />
-              </div>
-
-              {/* Blind Mode Banner */}
-              {blindMode && (
-                <div className="mb-6 p-4 rounded-xl flex items-center gap-3 animate-fade-in bg-purple-50 border-purple-200 dark:bg-purple-900/10 dark:border-purple-800/30 border">
-                  <span className="text-2xl">🎭</span>
-                  <div>
-                    <div className="text-purple-700 dark:text-purple-400 font-semibold text-sm">Blind Review Mode Active</div>
-                    <div className="text-slate-600 dark:text-slate-400 text-xs">Candidate names are hidden. Evaluate on merit alone.</div>
-                  </div>
-                </div>
-              )}
-
-              {/* Candidate Table */}
-              <div className="glass-card-static overflow-hidden mb-8 animate-fade-in-up delay-200">
-                <div className="px-6 py-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-transparent">
-                  <h2 className="font-display font-bold text-slate-800 dark:text-white text-lg">{t('prof_commission_panel')} - Общий рейтинг</h2>
-                  <Link href="/leaderboard" className="text-brand-500 dark:text-brand-400 text-sm hover:text-brand-600 dark:hover:text-brand-300 transition-colors">
-                    Full leaderboard →
-                  </Link>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="data-table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Candidate</th>
-                        <th>Score</th>
-                        <th>{t('metric_leadership')}</th>
-                        <th>{t('metric_motivation')}</th>
-                        <th>{t('metric_velocity')}</th>
-                        <th>AI Risk</th>
-                        <th>{t('cand_ai_rec')}</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {candidates.map((sc) => {
-                        const aiLabel = sc.scores.aiSuspicion.score >= 60 ? { l: 'High', c: '#f87171' }
-                          : sc.scores.aiSuspicion.score >= 30 ? { l: 'Mid', c: '#fbbf24' }
-                          : { l: 'Clean', c: '#34d399' };
-                        return (
-                          <tr key={sc.candidate.id}>
-                            <td>
-                              <span className="text-slate-500 dark:text-slate-400 font-mono text-xs">#{sc.rank}</span>
-                            </td>
-                            <td>
-                              <div className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
-                                {blindMode ? `Candidate #${sc.rank}` : sc.candidate.name}
-                              </div>
-                              {!blindMode && (
-                                <div className="text-xs text-slate-600 dark:text-slate-400">{sc.candidate.city} · {sc.candidate.age}y</div>
-                              )}
-                            </td>
-                            <td>
-                              <div className="flex items-center gap-2">
-                                <span className="text-lg font-bold font-mono" style={{ color: getScoreColor(sc.totalScore) }}>
-                                  {sc.totalScore}
-                                </span>
-                                <div className="w-16 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-                                  <div className="h-full rounded-full transition-all"
-                                    style={{ width: `${sc.totalScore}%`, background: getScoreColor(sc.totalScore) }} />
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <span style={{ color: getScoreColor(sc.scores.leadership.score) }} className="font-mono font-semibold text-sm">
-                                {sc.scores.leadership.score}
-                              </span>
-                            </td>
-                            <td>
-                              <span style={{ color: getScoreColor(sc.scores.motivation.score) }} className="font-mono font-semibold text-sm">
-                                {sc.scores.motivation.score}
-                              </span>
-                            </td>
-                            <td>
-                              <span style={{ color: getScoreColor(sc.scores.growthVelocity.score) }} className="font-mono font-semibold text-sm">
-                                {sc.scores.growthVelocity.score}
-                              </span>
-                            </td>
-                            <td>
-                              <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                                style={{ color: aiLabel.c, background: `${aiLabel.c}18`, border: `1px solid ${aiLabel.c}40` }}>
-                                {aiLabel.l}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={`text-xs font-semibold px-2 py-1 rounded-lg ${getRecommendationBadgeClass(sc.shortlistRecommendation)}`}>
-                                {getRecommendationLabel(sc.shortlistRecommendation)}
-                              </span>
-                            </td>
-                            <td>
-                              <Link href={`/candidates/${sc.candidate.id}`}
-                                className="text-brand-500 dark:text-brand-400 hover:text-brand-600 dark:hover:text-brand-300 text-xs font-medium transition-colors">
-                                View →
-                              </Link>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Bottom Feature Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in-up delay-300">
-                <Link href="/leaderboard">
-                  <div className="glass-card p-5 h-full">
-                    <div className="text-2xl mb-3">⬡</div>
-                    <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Full Leaderboard</h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">Sort, filter and compare all candidates with detailed dimension scores.</p>
-                  </div>
-                </Link>
-                <Link href="/upload">
-                  <div className="glass-card p-5 h-full">
-                    <div className="text-2xl mb-3">↑</div>
-                    <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Batch Upload</h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">Score an entire applicant pool by uploading a JSON or CSV file.</p>
-                  </div>
-                </Link>
-                <Link href="/submit">
-                  <div className="glass-card p-5 h-full">
-                    <div className="text-2xl mb-3">✦</div>
-                    <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Live Scoring Preview</h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm">See your score update in real-time as you fill in the application form.</p>
-                  </div>
-                </Link>
-              </div>
-            </>
-          )}
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-3 tracking-tight">
+                {feature.title}
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                {feature.desc}
+              </p>
+            </motion.div>
+          ))}
         </div>
+
+        <footer className="mt-20 text-center text-slate-400 text-sm font-medium">
+          {t('landing_footer')}
+        </footer>
       </main>
-    </>
+    </div>
   );
 }

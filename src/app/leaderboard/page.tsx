@@ -6,12 +6,13 @@ import Navbar from '@/components/Navbar';
 import { ScoredCandidate, WeightProfile } from '@/types';
 import { getScoreColor, getRecommendationLabel, getRecommendationBadgeClass } from '@/lib/utils';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import { TranslationKey } from '@/lib/i18n/translations';
 
-const WEIGHT_PROFILES: { value: WeightProfile; label: string; desc: string }[] = [
-  { value: 'default', label: 'Balanced', desc: 'Equal weight across all dimensions' },
-  { value: 'leadership', label: 'Leadership Focus', desc: 'Prioritize leadership signals' },
-  { value: 'authenticity', label: 'Authenticity Focus', desc: 'Prioritize genuine motivation' },
-  { value: 'potential', label: 'Growth Potential', desc: 'Prioritize velocity & trajectory' },
+const WEIGHT_PROFILES: { value: WeightProfile; labelKey: TranslationKey; desc: string }[] = [
+  { value: 'default', labelKey: 'lead_profile_balanced', desc: 'Equal weight across all dimensions' },
+  { value: 'leadership', labelKey: 'lead_profile_leadership', desc: 'Prioritize leadership signals' },
+  { value: 'authenticity', labelKey: 'lead_profile_authenticity', desc: 'Prioritize genuine motivation' },
+  { value: 'potential', labelKey: 'lead_profile_potential', desc: 'Prioritize velocity & trajectory' },
 ];
 
 type SortKey = 'totalScore' | 'leadership' | 'motivation' | 'growth' | 'communication' | 'growthVelocity' | 'aiSuspicion';
@@ -112,7 +113,7 @@ export default function LeaderboardPage() {
                           ? 'bg-brand-100 text-brand-700 border border-brand-300 dark:bg-brand-900/40 dark:text-brand-300 dark:border-brand-600/50'
                           : 'bg-slate-50 text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-800 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                       }`}>
-                      {p.label}
+                      {t(p.labelKey)}
                     </button>
                   ))}
                 </div>
@@ -124,11 +125,11 @@ export default function LeaderboardPage() {
                   <label className="text-xs text-slate-600 dark:text-slate-400 font-medium">{t('lead_verdict')}</label>
                   <select value={filterRec} onChange={e => setFilterRec(e.target.value)}
                     className="input-field w-auto text-xs py-1.5">
-                    <option value="all">All</option>
-                    <option value="STRONG_YES">Strong Yes</option>
-                    <option value="YES">Yes</option>
-                    <option value="MAYBE">Maybe</option>
-                    <option value="NO">No</option>
+                    <option value="all">{t('lead_verdict_all')}</option>
+                    <option value="STRONG_YES">{t('lead_verdict_strong_yes')}</option>
+                    <option value="YES">{t('lead_verdict_yes')}</option>
+                    <option value="MAYBE">{t('lead_verdict_maybe')}</option>
+                    <option value="NO">{t('lead_verdict_no')}</option>
                   </select>
                 </div>
 
@@ -137,10 +138,10 @@ export default function LeaderboardPage() {
                   <label className="text-xs text-slate-600 dark:text-slate-400 font-medium">{t('lead_flags')}</label>
                   <select value={filterFlag} onChange={e => setFilterFlag(e.target.value)}
                     className="input-field w-auto text-xs py-1.5">
-                    <option value="all">All</option>
-                    <option value="ai_flagged">AI Flagged</option>
-                    <option value="leader">Strong Leaders</option>
-                    <option value="high_velocity">High Velocity</option>
+                    <option value="all">{t('lead_verdict_all')}</option>
+                    <option value="ai_flagged">{t('lead_flag_ai')}</option>
+                    <option value="leader">{t('lead_flag_leader')}</option>
+                    <option value="high_velocity">{t('lead_flag_velocity')}</option>
                   </select>
                 </div>
 
@@ -151,7 +152,7 @@ export default function LeaderboardPage() {
                     type="text"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    placeholder={blindMode ? '... ' : '... '}
+                    placeholder="..."
                     className="input-field text-xs py-1.5 w-44"
                   />
                 </div>
@@ -256,7 +257,7 @@ export default function LeaderboardPage() {
                         </td>
                         <td>
                           <span className={`text-xs font-semibold px-2 py-1 rounded-lg ${getRecommendationBadgeClass(sc.shortlistRecommendation)}`}>
-                            {getRecommendationLabel(sc.shortlistRecommendation)}
+                            {getRecommendationLabel(sc.shortlistRecommendation, t)}
                           </span>
                         </td>
                         <td>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
@@ -31,21 +32,6 @@ interface ValidationData {
   ai_flagged_count: number;
 }
 
-const DIM_LABELS: Record<string, string> = {
-  leadership: 'Leadership',
-  motivation: 'Motivation',
-  growth: 'Growth',
-  communication: 'Communication',
-  growthVelocity: 'Velocity',
-};
-
-const REC_COLORS: Record<string, string> = {
-  STRONG_YES: '#34d399',
-  YES: '#60a5fa',
-  MAYBE: '#fbbf24',
-  NO: '#f87171',
-};
-
 function MetricCard({ label, value, sub, color, hint }: {
   label: string; value: string | number; sub?: string; color?: string; hint?: string;
 }) {
@@ -59,9 +45,25 @@ function MetricCard({ label, value, sub, color, hint }: {
 }
 
 export default function ValidationPage() {
+  const { t } = useLanguage();
   const [data, setData] = useState<ValidationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [source, setSource] = useState('');
+
+  const DIM_LABELS: Record<string, string> = {
+    leadership: t('metric_leadership'),
+    motivation: t('metric_motivation'),
+    growth: t('metric_growth'),
+    communication: t('metric_communication'),
+    growthVelocity: t('metric_velocity'),
+  };
+
+  const REC_COLORS: Record<string, string> = {
+    STRONG_YES: '#34d399',
+    YES: '#60a5fa',
+    MAYBE: '#fbbf24',
+    NO: '#f87171',
+  };
 
   useEffect(() => {
     // 🛡️ AUTH GUARD
@@ -86,7 +88,7 @@ export default function ValidationPage() {
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
           <div className="w-10 h-10 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-3" />
-          <p className="text-slate-600 text-sm">Running model validation...</p>
+          <p className="text-slate-600 text-sm">Validating...</p>
         </div>
       </div>
     </>
@@ -136,19 +138,17 @@ export default function ValidationPage() {
           <div className="mb-8 animate-fade-in-up">
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-display font-bold text-slate-800 dark:text-white">
-                Model <span className="gradient-text">Validation</span> Report
+                {t('val_report_title')}
               </h1>
               <span className="px-2 py-1 rounded-lg text-xs font-mono"
                 style={{ background: source === 'python_nlp' ? 'rgba(52,211,153,0.1)' : 'rgba(96,165,250,0.1)',
                          border: source === 'python_nlp' ? '1px solid rgba(52,211,153,0.3)' : '1px solid rgba(96,165,250,0.3)',
                          color: source === 'python_nlp' ? '#34d399' : '#60a5fa' }}>
-                {source === 'python_nlp' ? '🐍 Python NLP' : '⚡ TS Engine'}
+                {source === 'python_nlp' ? 'PYTHON NLP' : 'TS CORE'}
               </span>
             </div>
             <p className="text-slate-600 text-sm max-w-2xl">
-              Statistical comparison of our <strong className="text-slate-800">Advanced NLP Model</strong> vs a simple
-              <strong className="text-slate-800"> Rule-Based Baseline</strong>. This validates that our system provides
-              meaningful signal beyond raw GPA/experience counts.
+              {t('val_report_desc')}
             </p>
           </div>
 
@@ -157,27 +157,26 @@ export default function ValidationPage() {
             <MetricCard
               label="Spearman ρ"
               value={spearman.toFixed(3)}
-              sub={data.model_comparison.interpretation}
+              sub="Rank Correlation"
               color={spearmanColor}
-              hint="Rank correlation between Advanced and Baseline models. Higher = models agree on ordering."
+              hint="Rank correlation between models."
             />
             <MetricCard
-              label="Accept Agreement"
+              label={t('val_metric_agreement')}
               value={`${Math.round(data.model_comparison.accept_reject_agreement * 100)}%`}
-              sub="Baseline vs Advanced accept/reject"
+              sub="Binary Accord"
               color="#a78bfa"
-              hint="How often both models agree on accept vs reject decision at 50-point threshold"
             />
             <MetricCard
-              label="Shortlisted"
+              label={t('cand_shortlist')}
               value={`${data.shortlisted_count}/${data.total_candidates}`}
-              sub="Strong Yes + Yes verdicts"
+              sub="Top Tier"
               color="#34d399"
             />
             <MetricCard
-              label="AI Flagged"
+              label={t('cand_flags')}
               value={data.ai_flagged_count}
-              sub="Needs authenticity review"
+              sub="Needs Review"
               color="#f87171"
             />
           </div>
@@ -186,9 +185,9 @@ export default function ValidationPage() {
 
             {/* Score Distribution Comparison */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
-              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Score Distribution: Advanced vs Baseline</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">{t('val_dist_title')}</h3>
               <p className="text-slate-600 text-xs mb-4">
-                Our model produces higher variance (more discrimination) and shifts scores based on NLP signals, not just counts.
+                {t('val_dist_desc')}
               </p>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
@@ -209,10 +208,7 @@ export default function ValidationPage() {
 
             {/* Recommendation Distribution */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
-              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Verdict Distribution</h3>
-              <p className="text-slate-600 text-xs mb-4">
-                How the advanced model classifies the 12 demo candidates across recommendation tiers.
-              </p>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Verdicts</h3>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={recData} layout="vertical">
@@ -237,8 +233,8 @@ export default function ValidationPage() {
 
             {/* Dimension Statistics */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
-              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Per-Dimension Score Stats</h3>
-              <p className="text-slate-600 text-xs mb-4">Mean ± Std across all 12 candidates for each scoring dimension.</p>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">{t('val_stats_title')}</h3>
+              <p className="text-slate-600 text-xs mb-4">{t('val_stats_desc')}</p>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dimChartData}>
@@ -282,8 +278,8 @@ export default function ValidationPage() {
 
             {/* Radar: Avg Profile */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
-              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Average Candidate Profile</h3>
-              <p className="text-slate-600 text-xs mb-3">Mean scores across all dimensions — shows which areas the cohort is strongest in.</p>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">{t('val_radar_title')}</h3>
+              <p className="text-slate-600 text-xs mb-3">{t('val_radar_desc')}</p>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData}>
@@ -302,18 +298,17 @@ export default function ValidationPage() {
           {/* Edge Cases */}
           {data.edge_cases.length > 0 && (
             <div className="glass-card-static p-5 mb-6 animate-fade-in-up delay-400">
-              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Edge Cases — Model Disagreements</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">{t('val_edge_title')}</h3>
               <p className="text-slate-600 text-xs mb-4">
-                Candidates where Advanced NLP and Baseline models differ by ≥15 points.
-                These cases validate that our model captures signal invisible to simple rules.
+                {t('val_edge_desc')}
               </p>
               <div className="overflow-x-auto">
                 <table className="data-table">
                   <thead>
                     <tr>
                       <th>Candidate</th>
-                      <th>Advanced Score</th>
-                      <th>Baseline Score</th>
+                      <th>Advanced</th>
+                      <th>Baseline</th>
                       <th>Difference</th>
                       <th>Direction</th>
                       <th>Reason</th>
@@ -323,27 +318,12 @@ export default function ValidationPage() {
                     {data.edge_cases.map((ec, i) => (
                       <tr key={i}>
                         <td className="font-semibold text-slate-800 dark:text-slate-200">{ec.candidate_name}</td>
+                        <td className="font-mono font-bold text-brand-600">{ec.advanced_score}</td>
+                        <td className="font-mono text-slate-500">{ec.baseline_score}</td>
+                        <td className="font-mono font-bold text-amber-500">Δ{ec.difference}</td>
                         <td>
-                          <span className="font-mono font-bold text-brand-600">{ec.advanced_score}</span>
-                        </td>
-                        <td>
-                          <span className="font-mono text-slate-500">{ec.baseline_score}</span>
-                        </td>
-                        <td>
-                          <span className="font-mono font-bold" style={{
-                            color: ec.difference >= 25 ? '#f87171' : '#fbbf24'
-                          }}>
-                            Δ{ec.difference}
-                          </span>
-                        </td>
-                        <td>
-                          <span className="text-xs px-2 py-0.5 rounded-full"
-                            style={{
-                              background: ec.direction === 'advanced_higher' ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)',
-                              color: ec.direction === 'advanced_higher' ? '#059669' : '#dc2626',
-                              border: ec.direction === 'advanced_higher' ? '1px solid rgba(52,211,153,0.3)' : '1px solid rgba(248,113,113,0.3)',
-                            }}>
-                            {ec.direction === 'advanced_higher' ? 'NLP ↑' : 'Baseline ↑'}
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 uppercase font-black">
+                            {ec.direction.replace('_', ' ')}
                           </span>
                         </td>
                         <td className="text-xs text-slate-500 max-w-xs">{ec.likely_reason}</td>
@@ -357,38 +337,21 @@ export default function ValidationPage() {
 
           {/* Methodology */}
           <div className="glass-card-static p-6 animate-fade-in-up delay-500">
-            <h3 className="font-display font-bold text-slate-800 dark:text-white mb-4">Scoring Methodology</h3>
+            <h3 className="font-display font-bold text-slate-800 dark:text-white mb-4">{t('val_method_title')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="text-sm font-semibold text-brand-600 mb-2">Advanced NLP Model (Our System)</h4>
-                <ul className="space-y-1 text-sm text-slate-700">
-                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Flesch reading ease & vocabulary richness (RTTR)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Bilingual keyword density (EN + RU leadership/motivation/growth)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Sentence burstiness (AI detection via variance analysis)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Essay specificity (numbers, scale, results detection)</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Age-adjusted growth velocity score</li>
-                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Multi-signal AI phrase detection (20+ clichés)</li>
+                <h4 className="text-sm font-semibold text-brand-600 mb-2">Advanced NLP Model</h4>
+                <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-300">
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Semantic Analyis & Keyword Density</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Bilingual specificities (EN/RU NLP)</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Sentence burstiness & AI detection</li>
+                  <li className="flex items-start gap-2"><span className="text-brand-600 mt-0.5">→</span>Specificity & scale assessment</li>
                 </ul>
               </div>
-              <div>
-                <h4 className="text-sm font-semibold text-slate-600 mb-2">Baseline (Simple Rules)</h4>
-                <ul className="space-y-1 text-sm text-slate-500">
-                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>GPA / 5.0 × 100</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>Experience count × 12</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>Achievement count × 18</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span>Essay word count ÷ 3</li>
-                  <li className="flex items-start gap-2"><span className="text-slate-400 mt-0.5">→</span><em>No NLP, no semantic analysis</em></li>
-                </ul>
-
-                <div className="mt-4 p-3 rounded-lg text-xs"
-                  style={{ background: 'rgba(213,245,79,0.15)', border: '1px solid rgba(213,245,79,0.5)' }}>
-                  <div className="text-brand-700 font-semibold mb-1">Improvement over baseline:</div>
-                  <div className="text-slate-700">
-                    Our model catches candidates with strong potential but modest credentials (e.g. Малика Нурлан),
-                    and penalizes hollow essays regardless of GPA.
-                    Spearman ρ = <strong className="text-slate-900">{spearman.toFixed(3)}</strong> — models partially agree
-                    but diverge meaningfully on borderline cases.
-                  </div>
+              <div className="p-4 rounded-xl bg-brand-50/50 dark:bg-brand-900/10 border border-brand-100/50">
+                <div className="text-xs text-slate-600 dark:text-slate-400">
+                  Our model provides transparency (XAI). Every score is grounded in verifiable evidence extracted by the NLP engine. 
+                  Spearman ρ indicates strong but non-linear correlation.
                 </div>
               </div>
             </div>

@@ -32,7 +32,7 @@ export default function LoginPage() {
       localStorage.setItem('userName', email.split('@')[0].split('.')[0].charAt(0).toUpperCase() + email.split('@')[0].split('.')[0].slice(1));
       
       // Redirect based on role
-      const target = finalRole === 'student' ? '/student' : '/';
+      const target = finalRole === 'student' ? '/student' : '/admin';
       window.location.href = target;
       
       // Fallback in case redirect takes time
@@ -71,7 +71,7 @@ export default function LoginPage() {
             onClick={() => { setRoleMode('staff'); setEmail('admin@invision-u.kz'); }}
             className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${roleMode === 'staff' ? 'bg-white shadow-sm text-brand-600' : 'text-slate-500'}`}
           >
-            Сотрудник
+            {t('auth_staff')}
           </button>
         </div>
 
@@ -87,7 +87,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {roleMode === 'staff' && (
-              <p className="text-[10px] text-slate-400 mt-1 pl-1">Подсказка: Введите 'admin...' для демо-Admin, любое другое для Комиссии.</p>
+              <p className="text-[10px] text-slate-400 mt-1 pl-1">{t('auth_staff_hint')}</p>
             )}
           </div>
 

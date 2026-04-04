@@ -125,10 +125,10 @@ export default function CandidatePage() {
           {/* Back nav */}
           <div className="flex items-center gap-2 mb-6">
             <button onClick={() => router.back()} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white text-sm flex items-center gap-1 transition-colors">
-              ← Back
+              ← {t('nav_leaderboard')}
             </button>
             <span className="text-slate-400 dark:text-slate-600">/</span>
-            <span className="text-slate-600 dark:text-slate-400 text-sm">Candidate #{sc.rank}</span>
+            <span className="text-slate-600 dark:text-slate-400 text-sm">#{sc.rank}</span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -139,7 +139,7 @@ export default function CandidatePage() {
               {/* Security Alerts */}
               {sc.securityFlags && sc.securityFlags.length > 0 && (
                 <div className="p-5 rounded-2xl animate-fade-in-up bg-red-50 border-2 border-red-200 dark:bg-red-950 dark:border-red-800">
-                  <h3 className="text-sm font-bold text-red-700 dark:text-red-400 uppercase tracking-wider mb-2">🚨 Critical Security Alert</h3>
+                  <h3 className="text-sm font-bold text-red-700 dark:text-red-400 uppercase tracking-wider mb-2">🚨 Security Alert</h3>
                   <div className="flex flex-col gap-2">
                     {sc.securityFlags.map((sf, i) => (
                       <div key={i} className="text-sm text-red-700 dark:text-red-300 font-medium bg-red-100/50 dark:bg-red-900/50 p-2 rounded-lg">
@@ -158,7 +158,7 @@ export default function CandidatePage() {
                     {blindMode ? `#${sc.rank}` : sc.candidate.name.charAt(0)}
                   </div>
                   <div className="text-right">
-                    <div className="text-xs text-slate-500 dark:text-slate-400">Rank</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400">#</div>
                     <div className="text-2xl font-display font-bold text-slate-800 dark:text-white">#{sc.rank}</div>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default function CandidatePage() {
                 {/* Recommendation */}
                 <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider text-center mt-4 mb-2">{t('cand_ai_rec')}</div>
                 <div className={`text-center py-2 rounded-xl font-semibold text-sm ${getRecommendationBadgeClass(sc.shortlistRecommendation)}`}>
-                  {getRecommendationLabel(sc.shortlistRecommendation)}
+                  {getRecommendationLabel(sc.shortlistRecommendation, t)}
                 </div>
               </div>
 
@@ -255,7 +255,7 @@ export default function CandidatePage() {
                 <textarea
                   value={committeeNote}
                   onChange={e => setCommitteeNote(e.target.value)}
-                  placeholder="Add committee notes..."
+                  placeholder="..."
                   className="input-field text-xs bg-transparent"
                   rows={3}
                 />
@@ -351,9 +351,9 @@ export default function CandidatePage() {
                       <div className="flex items-center justify-between mb-4">
                         <h4 className="text-sm font-semibold text-slate-800 dark:text-white">{t('cand_ai_heatmap')}</h4>
                         <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded heat-1 inline-block" />Low</span>
-                          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded heat-2 inline-block" />Medium</span>
-                          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded heat-3 inline-block" />High</span>
+                          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded heat-1 inline-block" />{t('cand_ai_low')}</span>
+                          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded heat-2 inline-block" />{t('cand_ai_med')}</span>
+                          <span className="flex items-center gap-1"><span className="w-3 h-3 rounded heat-3 inline-block" />{t('cand_ai_high')}</span>
                         </div>
                       </div>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
@@ -408,7 +408,7 @@ export default function CandidatePage() {
                     <div className="animate-fade-in space-y-4">
                       {/* Experience */}
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Experience</h4>
+                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{t('cand_evidence_exp')}</h4>
                         <div className="space-y-1">
                           {sc.candidate.experience?.map((e, i) => (
                             <div key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
@@ -421,7 +421,7 @@ export default function CandidatePage() {
 
                       {/* Achievements */}
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Achievements</h4>
+                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{t('cand_evidence_ach')}</h4>
                         <div className="space-y-1">
                           {sc.candidate.achievements?.map((a, i) => (
                             <div key={i} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-300">
@@ -434,7 +434,7 @@ export default function CandidatePage() {
 
                       {/* Score Evidence */}
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">AI Scoring Evidence</h4>
+                        <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{t('cand_evidence_ai')}</h4>
                         <div className="space-y-2">
                           {Object.entries(sc.scores).map(([key, dim]) => (
                             <details key={key} className="group">
