@@ -104,16 +104,16 @@ export default function DashboardPage() {
                   AI-powered, explainable scoring for the inVision U admissions committee.
                   Every score comes with reasoning. Every decision stays human.
                 </p>
-                <div className="flex items-center gap-3 mt-6">
-                  <Link href="/leaderboard" className="btn-primary">
+                <div className="flex flex-col sm:flex-row items-center gap-3 mt-8">
+                  <Link href="/leaderboard" className="btn-primary w-full sm:w-auto text-center">
                     View Leaderboard →
                   </Link>
-                    <Link href="/submit" className="btn-secondary">
+                    <Link href="/submit" className="btn-secondary w-full sm:w-auto text-center">
                       Test Submission
                     </Link>
                     <button 
                       onClick={() => setBlindMode(!blindMode)}
-                      className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all border flex items-center gap-2 ${
+                      className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all border flex items-center justify-center gap-2 w-full sm:w-auto ${
                         blindMode 
                           ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20' 
                           : 'bg-white/10 border-white/20 text-slate-800 dark:text-white hover:bg-white/20'
@@ -124,13 +124,13 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-              {/* Top 3 mini cards */}
+              {/* Top 3 mini cards - Responsive Grid/Flex */}
               {!loading && (
-                <div className="flex gap-3 animate-fade-in-up delay-200">
+                <div className="w-full lg:w-auto flex flex-wrap justify-center lg:justify-start gap-4 animate-fade-in-up delay-200">
                   {top3.map((sc, i) => (
                     <Link key={sc.candidate.id} href={`/candidates/${sc.candidate.id}`}>
                       <div
-                        className="glass-card p-4 w-40 flex flex-col items-center text-center cursor-pointer"
+                        className="glass-card p-4 w-full sm:w-40 flex flex-col items-center text-center cursor-pointer hover:-translate-y-1 transition-transform relative"
                         style={i === 0 ? { borderColor: 'rgba(251,191,36,0.4)', boxShadow: '0 0 20px rgba(251,191,36,0.15)' } : {}}
                       >
                         {i === 0 && <div className="text-lg mb-1">🏆</div>}

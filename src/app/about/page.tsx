@@ -131,9 +131,9 @@ export default function AboutPage() {
               Прозрачная, объяснимая система поддержки приёмной комиссии.
               ИИ анализирует — человек решает. Никаких «чёрных ящиков».
             </p>
-            <div className="flex gap-3 mt-6">
-              <Link href="/" className="btn-primary">Dashboard комиссии →</Link>
-              <Link href="/validation" className="btn-secondary">Отчёт валидации →</Link>
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+              <Link href="/" className="btn-primary w-full sm:w-auto text-center">Dashboard комиссии →</Link>
+              <Link href="/validation" className="btn-secondary w-full sm:w-auto text-center">Отчёт валидации →</Link>
             </div>
           </div>
 

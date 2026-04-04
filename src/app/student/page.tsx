@@ -125,12 +125,12 @@ export default function StudentDashboard() {
         </button>
       </div>
 
-      {/* 3-Step Progress Tracker */}
-      <div className="relative z-10 mb-8">
-        <div className="flex gap-3">
+      {/* 3-Step Progress Tracker - Mobile Optimized */}
+      <div className="relative z-10 mb-10">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-3">
           {steps.map((step, idx) => (
-            <div key={step.num} className="flex-1 flex items-center gap-2">
-              <div className={`flex-1 p-5 rounded-2xl border-2 text-center transition-all ${
+            <div key={step.num} className="flex flex-col md:flex-row flex-1 items-center gap-2">
+              <div className={`w-full md:flex-1 p-5 rounded-2xl border-2 text-center transition-all ${
                 step.done
                   ? 'bg-emerald-50 dark:bg-emerald-900/15 border-emerald-300 dark:border-emerald-600/50'
                   : step.failed
@@ -154,7 +154,10 @@ export default function StudentDashboard() {
                 <div className="text-xs text-slate-400 dark:text-slate-500 leading-tight">{step.sublabel}</div>
               </div>
               {idx < steps.length - 1 && (
-                <div className={`h-0.5 w-4 flex-shrink-0 rounded-full ${step.done ? 'bg-emerald-300' : 'bg-slate-200 dark:bg-white/10'}`} />
+                <div className={`hidden md:block h-0.5 w-4 flex-shrink-0 rounded-full ${step.done ? 'bg-emerald-300' : 'bg-slate-200 dark:bg-white/10'}`} />
+              )}
+              {idx < steps.length - 1 && (
+                <div className={`md:hidden h-4 w-0.5 rounded-full ${step.done ? 'bg-emerald-300' : 'bg-slate-200 dark:bg-white/10'}`} />
               )}
             </div>
           ))}
