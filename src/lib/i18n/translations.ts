@@ -13,6 +13,7 @@ export const translations = {
     nav_status: 'Статус',
     nav_logout: 'Выйти',
     nav_api_online: 'API Онлайн',
+    nav_submit: 'Тест системы',
     
     // Auth
     auth_welcome: 'Добро пожаловать!',
@@ -91,6 +92,7 @@ export const translations = {
     nav_status: 'Status',
     nav_logout: 'Log Out',
     nav_api_online: 'API Online',
+    nav_submit: 'System Test',
     
     // Auth
     auth_welcome: 'Welcome back!',
@@ -169,6 +171,7 @@ export const translations = {
     nav_status: 'Мәртебе',
     nav_logout: 'Шығу',
     nav_api_online: 'API Желіде',
+    nav_submit: 'Жүйелік тест',
     
     // Auth
     auth_welcome: 'Қош келдіңіз!',

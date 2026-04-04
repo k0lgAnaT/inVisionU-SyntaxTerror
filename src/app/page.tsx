@@ -17,25 +17,30 @@ function StatCard({ value, label, sub, color }: { value: string | number; label:
   );
 }
 
-function ScoreRing({ score, size = 80 }: { score: number; size?: number }) {
+function ScoreRing({ score, size = 80, children }: { score: number; size?: number; children?: React.ReactNode }) {
   const r = (size - 12) / 2;
   const circ = 2 * Math.PI * r;
   const progress = (score / 100) * circ;
   const color = getScoreColor(score);
 
   return (
-    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(148,163,184,0.2)" strokeWidth="6" />
-      <circle
-        cx={size / 2} cy={size / 2} r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth="6"
-        strokeDasharray={`${progress} ${circ}`}
-        strokeLinecap="round"
-        style={{ filter: `drop-shadow(0 0 6px ${color}88)`, transition: 'stroke-dasharray 1s ease' }}
-      />
-    </svg>
+    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }} className="absolute">
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(148,163,184,0.15)" strokeWidth="6" />
+        <circle
+          cx={size / 2} cy={size / 2} r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth="6"
+          strokeDasharray={`${progress} ${circ}`}
+          strokeLinecap="round"
+          style={{ transition: 'stroke-dasharray 1s ease-in-out' }}
+        />
+      </svg>
+      <div className="z-10">
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -91,11 +96,21 @@ export default function DashboardPage() {
                   <Link href="/leaderboard" className="btn-primary">
                     View Leaderboard →
                   </Link>
-                  <Link href="/submit" className="btn-secondary">
-                    Test Submission
-                  </Link>
+                    <Link href="/submit" className="btn-secondary">
+                      Test Submission
+                    </Link>
+                    <button 
+                      onClick={() => setBlindMode(!blindMode)}
+                      className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all border flex items-center gap-2 ${
+                        blindMode 
+                          ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20' 
+                          : 'bg-white/10 border-white/20 text-slate-800 dark:text-white hover:bg-white/20'
+                      }`}
+                    >
+                      {blindMode ? '🎭 ' + t('lead_blind_mode') : '👁️ Show Names'}
+                    </button>
+                  </div>
                 </div>
-              </div>
 
               {/* Top 3 mini cards */}
               {!loading && (
@@ -109,13 +124,12 @@ export default function DashboardPage() {
                         {i === 0 && <div className="text-lg mb-1">🏆</div>}
                         {i === 1 && <div className="text-base mb-1">🥈</div>}
                         {i === 2 && <div className="text-base mb-1">🥉</div>}
-                        <div className="mb-2">
-                          <ScoreRing score={sc.totalScore} size={64} />
-                        </div>
-                        <div className="relative">
-                          <div className="-mt-10 mb-2 text-lg font-bold" style={{ color: getScoreColor(sc.totalScore) }}>
-                            {sc.totalScore}
-                          </div>
+                        <div className="mb-4">
+                          <ScoreRing score={sc.totalScore} size={68}>
+                            <span className="text-xl font-bold font-mono tracking-tighter" style={{ color: getScoreColor(sc.totalScore) }}>
+                              {sc.totalScore}
+                            </span>
+                          </ScoreRing>
                         </div>
                         <div className="text-xs font-semibold text-slate-800 dark:text-white truncate w-full">
                           {blindMode ? `Candidate #${sc.rank}` : sc.candidate.name}

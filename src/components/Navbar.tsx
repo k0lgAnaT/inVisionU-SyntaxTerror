@@ -12,7 +12,8 @@ const adminNavItems: { href: string; labelKey: TranslationKey; icon: string }[] 
   { href: '/', labelKey: 'nav_dashboard', icon: '◈' },
   { href: '/leaderboard', labelKey: 'nav_leaderboard', icon: '⬡' },
   { href: '/validation', labelKey: 'nav_validation', icon: '📊' },
-  { href: '/upload', labelKey: 'nav_upload', icon: '↑' },
+  { href: '/submit', labelKey: 'nav_submit', icon: '⚡' },
+  { href: '/about', labelKey: 'nav_about', icon: 'ℹ️' },
 ];
 
 const studentNavItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
@@ -59,10 +60,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link href={role === 'student' ? '/student' : '/'} className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-xl bg-brand-400 flex items-center justify-center text-black font-bold group-hover:scale-105 transition-transform">
+              <div className="w-8 h-8 rounded-xl bg-brand-400 flex items-center justify-center text-black font-bold group-hover:scale-105 transition-transform shadow-sm">
                 iU
               </div>
-              <span className="font-display font-semibold text-lg tracking-tight text-slate-800">
+              <span className="font-display font-semibold text-lg tracking-tight text-slate-800 dark:text-white whitespace-nowrap">
                 inVision <span className="text-brand-600 font-bold">U</span>
               </span>
             </Link>

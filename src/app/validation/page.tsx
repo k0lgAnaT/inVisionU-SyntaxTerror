@@ -128,7 +128,7 @@ export default function ValidationPage() {
           {/* Header */}
           <div className="mb-8 animate-fade-in-up">
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-display font-bold text-slate-800">
+              <h1 className="text-3xl font-display font-bold text-slate-800 dark:text-white">
                 Model <span className="gradient-text">Validation</span> Report
               </h1>
               <span className="px-2 py-1 rounded-lg text-xs font-mono"
@@ -179,7 +179,7 @@ export default function ValidationPage() {
 
             {/* Score Distribution Comparison */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
-              <h3 className="font-display font-bold text-slate-800 mb-1">Score Distribution: Advanced vs Baseline</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Score Distribution: Advanced vs Baseline</h3>
               <p className="text-slate-600 text-xs mb-4">
                 Our model produces higher variance (more discrimination) and shifts scores based on NLP signals, not just counts.
               </p>
@@ -202,7 +202,7 @@ export default function ValidationPage() {
 
             {/* Recommendation Distribution */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
-              <h3 className="font-display font-bold text-slate-800 mb-1">Verdict Distribution</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Verdict Distribution</h3>
               <p className="text-slate-600 text-xs mb-4">
                 How the advanced model classifies the 12 demo candidates across recommendation tiers.
               </p>
@@ -230,7 +230,7 @@ export default function ValidationPage() {
 
             {/* Dimension Statistics */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
-              <h3 className="font-display font-bold text-slate-800 mb-1">Per-Dimension Score Stats</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Per-Dimension Score Stats</h3>
               <p className="text-slate-600 text-xs mb-4">Mean ± Std across all 12 candidates for each scoring dimension.</p>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
@@ -275,7 +275,7 @@ export default function ValidationPage() {
 
             {/* Radar: Avg Profile */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
-              <h3 className="font-display font-bold text-slate-800 mb-1">Average Candidate Profile</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Average Candidate Profile</h3>
               <p className="text-slate-600 text-xs mb-3">Mean scores across all dimensions — shows which areas the cohort is strongest in.</p>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
@@ -295,7 +295,7 @@ export default function ValidationPage() {
           {/* Edge Cases */}
           {data.edge_cases.length > 0 && (
             <div className="glass-card-static p-5 mb-6 animate-fade-in-up delay-400">
-              <h3 className="font-display font-bold text-slate-800 mb-1">Edge Cases — Model Disagreements</h3>
+              <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">Edge Cases — Model Disagreements</h3>
               <p className="text-slate-600 text-xs mb-4">
                 Candidates where Advanced NLP and Baseline models differ by ≥15 points.
                 These cases validate that our model captures signal invisible to simple rules.
@@ -315,7 +315,7 @@ export default function ValidationPage() {
                   <tbody>
                     {data.edge_cases.map((ec, i) => (
                       <tr key={i}>
-                        <td className="font-semibold text-slate-800">{ec.candidate_name}</td>
+                        <td className="font-semibold text-slate-800 dark:text-slate-200">{ec.candidate_name}</td>
                         <td>
                           <span className="font-mono font-bold text-brand-600">{ec.advanced_score}</span>
                         </td>
@@ -350,7 +350,7 @@ export default function ValidationPage() {
 
           {/* Methodology */}
           <div className="glass-card-static p-6 animate-fade-in-up delay-500">
-            <h3 className="font-display font-bold text-slate-800 mb-4">Scoring Methodology</h3>
+            <h3 className="font-display font-bold text-slate-800 dark:text-white mb-4">Scoring Methodology</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h4 className="text-sm font-semibold text-brand-600 mb-2">Advanced NLP Model (Our System)</h4>
