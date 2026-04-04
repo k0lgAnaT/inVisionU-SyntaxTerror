@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { ScoredCandidate, WeightProfile } from '@/types';
 import { getScoreColor, getRecommendationLabel, getRecommendationBadgeClass } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 const WEIGHT_PROFILES: { value: WeightProfile; label: string; desc: string }[] = [
   { value: 'default', label: 'Balanced', desc: 'Equal weight across all dimensions' },
@@ -25,6 +26,7 @@ export default function LeaderboardPage() {
   const [filterRec, setFilterRec] = useState<string>('all');
   const [filterFlag, setFilterFlag] = useState<string>('all');
   const [search, setSearch] = useState('');
+  const { t } = useLanguage();
 
   const loadCandidates = (p: WeightProfile) => {
     setLoading(true);
@@ -61,7 +63,7 @@ export default function LeaderboardPage() {
     });
 
   const SortBtn = ({ k, label }: { k: SortKey; label: string }) => (
-    <button onClick={() => handleSort(k)} className={`flex items-center gap-1 hover:text-brand-600 transition-colors ${sortKey === k ? 'text-brand-600 font-bold' : 'text-slate-600'}`}>
+    <button onClick={() => handleSort(k)} className={`flex items-center gap-1 hover:text-brand-600 dark:hover:text-brand-300 transition-colors ${sortKey === k ? 'text-brand-600 dark:text-brand-300 font-bold' : 'text-slate-600 dark:text-slate-400'}`}>
       {label}
       <span className="text-xs">{sortKey === k ? (sortDir === 'desc' ? '↓' : '↑') : '↕'}</span>
     </button>
@@ -76,10 +78,10 @@ export default function LeaderboardPage() {
 
           {/* Header */}
           <div className="mb-8 animate-fade-in-up">
-            <h1 className="text-3xl font-display font-bold text-slate-800 mb-1">
-              Candidate <span className="gradient-text">Leaderboard</span>
+            <h1 className="text-3xl font-display font-bold text-slate-800 dark:text-white mb-1">
+              {t('lead_title')}
             </h1>
-            <p className="text-slate-600 text-sm">Ranked, filterable view of all applicants. Every score is explainable.</p>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">{t('lead_desc')}</p>
           </div>
 
           {/* Controls Bar */}
@@ -87,15 +89,15 @@ export default function LeaderboardPage() {
             <div className="flex flex-col lg:flex-row gap-4">
               {/* Weight Profile */}
               <div className="flex flex-col gap-1">
-                <label className="text-xs text-slate-600 font-medium">Scoring Profile</label>
+                <label className="text-xs text-slate-600 dark:text-slate-400 font-medium">{t('lead_profile')}</label>
                 <div className="flex gap-2 flex-wrap">
                   {WEIGHT_PROFILES.map(p => (
                     <button key={p.value} onClick={() => setProfile(p.value)}
                       title={p.desc}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                         profile === p.value
-                          ? 'bg-brand-100 text-brand-700 border border-brand-300'
-                          : 'bg-slate-50 text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-800'
+                          ? 'bg-brand-100 text-brand-700 border border-brand-300 dark:bg-brand-900/40 dark:text-brand-300 dark:border-brand-600/50'
+                          : 'bg-slate-50 text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-800 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
                       }`}>
                       {p.label}
                     </button>
@@ -106,7 +108,7 @@ export default function LeaderboardPage() {
               <div className="flex gap-3 flex-wrap lg:ml-auto items-end">
                 {/* Recommendation Filter */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-slate-600 font-medium">Verdict</label>
+                  <label className="text-xs text-slate-600 dark:text-slate-400 font-medium">{t('lead_verdict')}</label>
                   <select value={filterRec} onChange={e => setFilterRec(e.target.value)}
                     className="input-field w-auto text-xs py-1.5">
                     <option value="all">All</option>
@@ -119,7 +121,7 @@ export default function LeaderboardPage() {
 
                 {/* Flag Filter */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-slate-600 font-medium">Flag</label>
+                  <label className="text-xs text-slate-600 dark:text-slate-400 font-medium">{t('lead_flags')}</label>
                   <select value={filterFlag} onChange={e => setFilterFlag(e.target.value)}
                     className="input-field w-auto text-xs py-1.5">
                     <option value="all">All</option>
@@ -131,12 +133,12 @@ export default function LeaderboardPage() {
 
                 {/* Search */}
                 <div className="flex flex-col gap-1">
-                  <label className="text-xs text-slate-600 font-medium">Search</label>
+                  <label className="text-xs text-slate-600 dark:text-slate-400 font-medium">{t('lead_search')}</label>
                   <input
                     type="text"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    placeholder={blindMode ? 'Search by city...' : 'Name or city...'}
+                    placeholder={blindMode ? '... ' : '... '}
                     className="input-field text-xs py-1.5 w-44"
                   />
                 </div>
@@ -146,20 +148,20 @@ export default function LeaderboardPage() {
 
           {/* Results Count */}
           <div className="flex items-center gap-2 mb-4 text-sm">
-            <span className="text-slate-600">Showing</span>
-            <span className="text-slate-800 font-bold">{filtered.length}</span>
-            <span className="text-slate-600">of {candidates.length} candidates</span>
+            <span className="text-slate-600 dark:text-slate-400">{t('lead_showing')}</span>
+            <span className="text-slate-800 dark:text-white font-bold">{filtered.length}</span>
+            <span className="text-slate-600 dark:text-slate-400">{t('lead_of')} {candidates.length} {t('lead_candidates')}</span>
             {blindMode && (
               <span className="ml-2 px-2 py-0.5 rounded-full text-xs"
-                style={{ background: 'rgba(124,58,237,0.1)', color: '#7c3aed', border: '1px solid rgba(124,58,237,0.3)' }}>
-                🎭 Blind Mode
+                style={{ background: 'rgba(124,58,237,0.1)', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.3)' }}>
+                {t('lead_blind_mode')}
               </span>
             )}
           </div>
 
           {/* Table */}
           {loading ? (
-            <div className="text-center py-24 text-slate-600">
+            <div className="text-center py-24 text-slate-600 dark:text-slate-400">
               <div className="w-10 h-10 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-3" />
               Scoring all candidates...
             </div>
@@ -169,16 +171,16 @@ export default function LeaderboardPage() {
                 <table className="data-table">
                   <thead>
                     <tr>
-                      <th>Rank</th>
-                      <th>Candidate</th>
-                      <th><SortBtn k="totalScore" label="Total" /></th>
-                      <th><SortBtn k="leadership" label="Lead." /></th>
-                      <th><SortBtn k="motivation" label="Motiv." /></th>
-                      <th><SortBtn k="growth" label="Growth" /></th>
-                      <th><SortBtn k="growthVelocity" label="Velocity" /></th>
-                      <th><SortBtn k="aiSuspicion" label="AI Risk" /></th>
-                      <th>Flags</th>
-                      <th>Verdict</th>
+                      <th>{t('lead_rank')}</th>
+                      <th>{t('lead_candidate')}</th>
+                      <th><SortBtn k="totalScore" label={t('lead_total')} /></th>
+                      <th><SortBtn k="leadership" label={t('metric_leadership')} /></th>
+                      <th><SortBtn k="motivation" label={t('metric_motivation')} /></th>
+                      <th><SortBtn k="growth" label={t('metric_growth')} /></th>
+                      <th><SortBtn k="growthVelocity" label={t('metric_velocity')} /></th>
+                      <th><SortBtn k="aiSuspicion" label={t('lead_ai_risk')} /></th>
+                      <th>{t('lead_flags')}</th>
+                      <th>{t('lead_verdict')}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -190,24 +192,24 @@ export default function LeaderboardPage() {
                             {sc.rank === 1 && <span>🏆</span>}
                             {sc.rank === 2 && <span>🥈</span>}
                             {sc.rank === 3 && <span>🥉</span>}
-                            <span className="text-slate-400 font-mono text-xs">#{sc.rank}</span>
+                            <span className="text-slate-500 dark:text-slate-400 font-mono text-xs">#{sc.rank}</span>
                           </div>
                         </td>
                         <td>
-                          <div className="font-semibold text-slate-800">
+                          <div className="font-semibold text-slate-800 dark:text-slate-200">
                             {blindMode ? `Candidate #${sc.rank}` : sc.candidate.name}
                           </div>
                           {!blindMode && (
-                            <div className="text-xs text-slate-600">{sc.candidate.city} · {sc.candidate.school?.split(' ').slice(0, 3).join(' ')}</div>
+                            <div className="text-xs text-slate-600 dark:text-slate-400">{sc.candidate.city} · {sc.candidate.school?.split(' ').slice(0, 3).join(' ')}</div>
                           )}
-                          <div className="text-xs text-slate-500">{sc.candidate.age}y · GPA {sc.candidate.gpa}</div>
+                          <div className="text-xs text-slate-500 dark:text-slate-500">{sc.candidate.age}y · GPA {sc.candidate.gpa}</div>
                         </td>
                         <td>
                           <div className="flex items-center gap-2">
                             <span className="text-base font-bold font-mono" style={{ color: getScoreColor(sc.totalScore) }}>
                               {sc.totalScore}
                             </span>
-                            <div className="w-12 h-1.5 rounded-full bg-slate-200">
+                            <div className="w-12 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700">
                               <div className="h-full rounded-full" style={{ width: `${sc.totalScore}%`, background: getScoreColor(sc.totalScore) }} />
                             </div>
                           </div>
@@ -235,7 +237,7 @@ export default function LeaderboardPage() {
                         <td>
                           <div className="flex flex-wrap gap-1 max-w-32">
                             {sc.flags.slice(0, 2).map((f, i) => (
-                              <span key={i} className="text-xs" title={f}>{f.split(' ')[0]}</span>
+                              <span key={i} className="text-xs text-slate-600 dark:text-slate-400" title={f}>{f.split(' ')[0]}</span>
                             ))}
                           </div>
                         </td>
@@ -246,8 +248,8 @@ export default function LeaderboardPage() {
                         </td>
                         <td>
                           <Link href={`/candidates/${sc.candidate.id}`}
-                            className="text-brand-400 hover:text-brand-300 text-xs font-medium transition-colors whitespace-nowrap">
-                            Deep Dive →
+                            className="text-brand-500 dark:text-brand-400 hover:text-brand-600 dark:hover:text-brand-300 text-xs font-medium transition-colors whitespace-nowrap">
+                            {t('lead_deep_dive')}
                           </Link>
                         </td>
                       </tr>
@@ -257,8 +259,8 @@ export default function LeaderboardPage() {
               </div>
 
               {filtered.length === 0 && (
-                <div className="text-center py-12 text-slate-600 font-medium">
-                  No candidates match your filters.
+                <div className="text-center py-12 text-slate-600 dark:text-slate-400 font-medium">
+                  {t('lead_no_results')}
                 </div>
               )}
             </div>
