@@ -171,6 +171,9 @@ export const translations = {
     auth_staff_hint: 'Подсказка: Введите "admin" для демо-Админа, любое другое для Комиссии.',
     auth_welcome_msg: 'Добро пожаловать в inVision U. Ваш аккаунт создан.',
     auth_privacy: 'Защищено Политикой конфиденциальности inVision U. Данные зашифрованы.',
+    auth_temp_pass: 'Временный пароль',
+    auth_staff_info: 'Новый член комиссии получит доступ только к чтению анкет и возможностей выставления оценки.',
+    auth_email_login: 'E-mail (Логин)',
   },
   en: {
     // Nav
@@ -342,6 +345,9 @@ export const translations = {
     auth_staff_hint: 'Hint: Enter "admin" for demo Admin, anything else for Commission.',
     auth_welcome_msg: 'Welcome to inVision U. Your account has been created.',
     auth_privacy: 'Protected by inVision U Privacy Policy. Data remains secure and encrypted.',
+    auth_temp_pass: 'Temporary Password',
+    auth_staff_info: 'Special commission access granted for evaluation only. Admins can revoke at any time.',
+    auth_email_login: 'E-mail (Login)',
   },
   kz: {
     // Nav
@@ -514,6 +520,9 @@ export const translations = {
     auth_staff_hint: 'Нұсқау: Демо-Админ үшін "admin" енгізіңіз, басқасы — Комиссия.',
     auth_welcome_msg: 'inVision U-ға қош келдіңіз. Тіркелгіңіз жасалды.',
     auth_privacy: 'inVision U Құпиялылық саясатымен қамтамасыз етілген. Деректер шифрланған.',
+    auth_temp_pass: 'Уақытша құпиясөз',
+    auth_staff_info: 'Комиссия мүшесі тек анкеттерді оқуға және бағалауға рұқсат алады.',
+    auth_email_login: 'E-mail (Логин)',
   }
 };
 

@@ -107,16 +107,9 @@ export default function AdminDashboardPage() {
                     <Link href="/submit" className="btn-secondary w-full sm:w-auto text-center">
                       {t('nav_submit')}
                     </Link>
-                    <button 
-                      onClick={() => setBlindMode(!blindMode)}
-                      className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all border flex items-center justify-center gap-2 w-full sm:w-auto ${
-                        blindMode 
-                          ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-500/20' 
-                          : 'bg-white/10 border-white/20 text-slate-800 dark:text-white hover:bg-white/20'
-                      }`}
-                    >
-                      {blindMode ? '🎭 ' + t('lead_blind_mode') : '👁️ ' + (lang === 'ru' ? 'Показать имена' : lang === 'kz' ? 'Аттарын көрсету' : 'Show Names')}
-                    </button>
+                    <Link href="/admin/users" className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all border border-emerald-500/30 flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-emerald-500/20">
+                      👥 {t('prof_add_commission')}
+                    </Link>
                   </div>
                 </div>
 
@@ -183,7 +176,7 @@ export default function AdminDashboardPage() {
               {/* Table */}
               <div className="glass-card-static overflow-hidden mb-8 animate-fade-in-up delay-200">
                 <div className="px-6 py-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-transparent">
-                  <h2 className="font-display font-bold text-slate-800 dark:text-white text-lg">{t('prof_commission_panel')}</h2>
+                  <h2 className="font-display font-bold text-slate-800 dark:text-white text-lg">{t('lead_title')}</h2>
                   <Link href="/leaderboard" className="text-brand-500 dark:text-brand-400 text-sm hover:text-brand-600 dark:hover:text-brand-300 transition-colors">
                     {t('nav_leaderboard')} →
                   </Link>

@@ -13,12 +13,14 @@ const adminNavItems: { href: string; labelKey: TranslationKey; icon: string }[] 
   { href: '/leaderboard', labelKey: 'nav_leaderboard', icon: '⬡' },
   { href: '/validation', labelKey: 'nav_validation', icon: '📊' },
   { href: '/submit', labelKey: 'nav_submit', icon: '⚡' },
+  { href: '/profile', labelKey: 'prof_title', icon: '👤' },
 ];
 
 const studentNavItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
   { href: '/student', labelKey: 'nav_status', icon: '📋' },
   { href: '/student/test', labelKey: 'nav_test', icon: '🧠' },
   { href: '/student/admission', labelKey: 'nav_admission', icon: '📝' },
+  { href: '/profile', labelKey: 'prof_title', icon: '👤' },
 ];
 
 export default function Navbar() {

@@ -28,7 +28,7 @@ export default function ProfilePage() {
 
   const getRoleDisplayName = () => {
     if (role === 'admin') return t('auth_admin');
-    if (role === 'commission') return 'Член комиссии';
+    if (role === 'commission') return t('auth_staff');
     return t('auth_student');
   };
 
@@ -39,7 +39,7 @@ export default function ProfilePage() {
         <div className="mb-8">
           <Link href={role === 'student' ? '/student' : '/'} className="text-sm font-semibold text-slate-500 hover:text-brand-600 mb-4 inline-block">← Назад</Link>
           <h1 className="text-3xl font-display font-bold text-slate-800">{t('prof_title')}</h1>
-          <p className="text-slate-600 mt-2">Управление вашим аккаунтом ({getRoleDisplayName()})</p>
+          <p className="text-slate-600 mt-2">{t('prof_role')}: {getRoleDisplayName()}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -66,14 +66,14 @@ export default function ProfilePage() {
               <h3 className="text-lg font-bold text-slate-800 mb-4">Детали аккаунта</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="text-xs font-semibold text-slate-500 block mb-1">E-mail</label>
+                  <label className="text-xs font-semibold text-slate-500 block mb-1">{t('auth_email_pass')}</label>
                   <div className="font-medium text-slate-800">
                     {role === 'student' ? (userName ? `${userName.toLowerCase().split(' ').join('.')}@invision-u.kz` : 'student@invision-u.kz') : role === 'admin' ? 'admin@invision-u.kz' : 'commission@invision-u.kz'}
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-slate-500 block mb-1">Язык интерфейса</label>
-                  <div className="font-medium text-slate-800">Русский (изменяется в меню)</div>
+                  <label className="text-xs font-semibold text-slate-500 block mb-1">{t('nav_about')}</label>
+                  <div className="font-medium text-slate-800">{t('nav_api_online')}</div>
                 </div>
               </div>
             </div>
@@ -99,7 +99,7 @@ export default function ProfilePage() {
             {role === 'admin' && (
               <div className="glass-card-static p-6 bg-slate-800 text-white border-none">
                 <h3 className="text-lg font-bold text-white mb-2">{t('prof_commission_panel')}</h3>
-                <p className="text-sm text-slate-400 mb-4">Только администратор может формировать состав приемной комиссии.</p>
+                <p className="text-sm text-slate-400 mb-4">{t('auth_staff_hint')}</p>
                 <Link href="/admin/users" className="bg-brand-500 text-white rounded-lg px-4 py-2 font-semibold text-sm inline-block transition hover:bg-brand-400">
                   {t('prof_add_commission')} →
                 </Link>
