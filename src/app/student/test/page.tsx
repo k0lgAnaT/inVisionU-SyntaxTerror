@@ -8,6 +8,7 @@ type Step = 'intro' | 'select_program' | 'test' | 'results';
 
 export default function StudentTestPage() {
   const { lang, t } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<Step>('intro');
   const [selectedProgram, setSelectedProgram] = useState('');
   const [questions, setQuestions] = useState<TestQuestion[]>([]);
@@ -15,6 +16,12 @@ export default function StudentTestPage() {
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(60);
   const [answers, setAnswers] = useState<number[]>([]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const safeLang = mounted ? (lang as 'ru' | 'en' | 'kz') : 'ru';
 
   // Programs mapping
   const programsList = [
@@ -59,6 +66,8 @@ export default function StudentTestPage() {
       setCurrentIndex(c => c + 1);
       setTimeLeft(60);
     } else {
+      const finalScore = index === q.correctIndex ? score + 1 : score;
+      localStorage.setItem('testScore', Math.round((finalScore / questions.length) * 100).toString());
       setStep('results');
     }
   };
@@ -126,12 +135,12 @@ export default function StudentTestPage() {
                 {questions[currentIndex].category}
               </span>
               <h3 className="text-2xl font-semibold text-slate-800 leading-snug">
-                {questions[currentIndex].question[lang as 'ru' | 'en' | 'kz'] || questions[currentIndex].question['ru']}
+                {questions[currentIndex].question[safeLang] || questions[currentIndex].question['ru']}
               </h3>
             </div>
 
             <div className="space-y-3">
-              {(questions[currentIndex].options[lang as 'ru' | 'en' | 'kz'] || questions[currentIndex].options['ru']).map((opt, i) => (
+              {(questions[currentIndex].options[safeLang] || questions[currentIndex].options['ru']).map((opt, i) => (
                 <button
                   key={i}
                   onClick={() => handleAnswer(i)}
@@ -177,8 +186,8 @@ export default function StudentTestPage() {
                       <div className="mt-0.5">{isCorrect ? '✅' : '❌'}</div>
                       <div>
                         <div className="text-xs font-semibold mb-1 text-slate-800">{q.category}</div>
-                        <div className="text-sm text-slate-600 mb-2">{q.question[lang as 'ru' | 'en' | 'kz'] || q.question['ru']}</div>
-                        {!isCorrect && <div className="text-xs text-brand-600 font-medium">Пояснение: {q.explanation[lang as 'ru' | 'en' | 'kz'] || q.explanation['ru']}</div>}
+                        <div className="text-sm text-slate-600 mb-2">{q.question[safeLang] || q.question['ru']}</div>
+                        {!isCorrect && <div className="text-xs text-brand-600 font-medium">Пояснение: {q.explanation[safeLang] || q.explanation['ru']}</div>}
                       </div>
                     </div>
                   </div>
