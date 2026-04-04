@@ -123,8 +123,8 @@ export default function UploadPage() {
                 onDragLeave={() => setDragOver(false)}
                 className="rounded-xl border-2 border-dashed p-8 text-center transition-all cursor-pointer"
                 style={{
-                  borderColor: dragOver ? '#3b5cff' : 'rgba(59,92,255,0.25)',
-                  background: dragOver ? 'rgba(59,92,255,0.08)' : 'rgba(22,25,48,0.5)',
+                  borderColor: dragOver ? '#94b80a' : 'rgba(148,184,10,0.3)',
+                  background: dragOver ? 'rgba(148,184,10,0.06)' : 'rgba(241,245,249,0.8)',
                 }}
                 onClick={() => document.getElementById('fileInput')?.click()}
               >

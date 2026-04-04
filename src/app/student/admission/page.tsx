@@ -5,21 +5,66 @@ import Link from 'next/link';
 
 export default function StudentAdmissionPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [essayText, setEssayText] = useState('');
 
-  // Example candidate structure based on the figma
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+
+    try {
+      const userName = localStorage.getItem('userName') || 'Студент';
+      const mockCandidate = {
+        id: `cand-new-${Date.now()}`,
+        name: userName,
+        age: 18,
+        city: "Алматы",
+        school: "Школа абитуриента",
+        gpa: 4.0,
+        submittedAt: new Date().toISOString().split('T')[0],
+        essay: essayText,
+        experience: [],
+        achievements: [],
+        languages: ["Русский"],
+        socialLinks: {},
+        videoStatement: false,
+        references: 1,
+        extracurricular: ""
+      };
+
+      const res = await fetch('/api/candidates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ candidate: mockCandidate })
+      });
+      const result = await res.json();
+
+      if (result.success && result.data) {
+        const rec = result.data.shortlistRecommendation;
+        if (rec === 'STRONG_YES' || rec === 'YES') {
+          localStorage.setItem('admissionStatus', 'invited');
+        } else {
+          localStorage.setItem('admissionStatus', 'rejected');
+        }
+      }
+
+      setLoading(false);
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      setSubmitted(true); // fall back to success screen
+    }
   };
 
   if (submitted) {
     return (
       <main className="max-w-4xl mx-auto px-4 py-12">
         <div className="glass-card-static p-12 text-center animate-fade-in-up">
-          <div className="w-20 h-20 bg-brand-400 text-black rounded-full flex items-center justify-center text-4xl mx-auto mb-6">📝</div>
-          <h1 className="text-3xl font-display font-bold text-slate-800 mb-4">Материалы отправлены!</h1>
+          <div className="w-20 h-20 bg-emerald-400 text-black rounded-full flex items-center justify-center text-4xl mx-auto mb-6">✨</div>
+          <h1 className="text-3xl font-display font-bold text-slate-800 mb-4">Материалы успешно оценены!</h1>
           <p className="text-lg text-slate-600 mb-8 max-w-lg mx-auto">
-            Ваше эссе и видео-визитка успешно загружены. Наш AI-ассистент и приёмная комиссия скоро приступят к их оценке.
+            Ваше эссе прошло моментальную оценку нашим ИИ-ассистентом. Решение комиссии уже обновлено в вашем статусе.
           </p>
           <Link href="/student" className="btn-secondary px-8">
             Вернуться в личный кабинет
@@ -48,6 +93,8 @@ export default function StudentAdmissionPage() {
             rows={8} 
             className="input-field font-mono text-sm" 
             placeholder="Я хочу учиться в inVision U, потому что..."
+            value={essayText}
+            onChange={(e) => setEssayText(e.target.value)}
           ></textarea>
         </div>
 
@@ -82,7 +129,21 @@ export default function StudentAdmissionPage() {
         </div>
 
         <div className="glass-card-static p-6">
-          <h2 className="text-xl font-bold text-slate-800 mb-4">2. Дополнительные детали</h2>
+          <h2 className="text-xl font-bold text-slate-800 mb-4">2. Выбор специальности</h2>
+          <p className="text-sm text-slate-500 mb-4">Выберите направление, на которое вы подаете заявку (на основе Основных специальностей inVision U):</p>
+          <select required className="input-field w-full bg-white font-medium text-slate-800 cursor-pointer">
+            <option value="" disabled selected>-- Выберите специальность --</option>
+            <option value="creative-engineering">Creative Engineering / Креативная Инженерия</option>
+            <option value="it-product-design">Innovative IT Product Design and Development / Инновационный Дизайн и Разработка ИТ-Продуктов</option>
+            <option value="sociology-leadership">Sociology: Leadership and Innovation / Социология: Лидерство и Инновации</option>
+            <option value="public-policy">Public Policy and Development / Государственная Политика и Развитие</option>
+            <option value="digital-media">Digital Media and Marketing / Цифровые Медиа и Маркетинг</option>
+            <option value="foundation">Foundation Year / Подготовительный Год</option>
+          </select>
+        </div>
+
+        <div className="glass-card-static p-6">
+          <h2 className="text-xl font-bold text-slate-800 mb-4">3. Дополнительные детали</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-xs font-semibold text-slate-600 mb-1 block">GPA (если применимо)</label>
@@ -96,8 +157,8 @@ export default function StudentAdmissionPage() {
         </div>
 
         <div className="flex justify-end gap-4 pt-4">
-          <button type="submit" className="btn-primary w-full md:w-auto px-10 py-3 text-lg rounded-full shadow-lg">
-            Подать заявку
+          <button type="submit" disabled={loading} className="btn-primary w-full md:w-auto px-10 py-3 text-lg rounded-full shadow-lg">
+            {loading ? 'Оценка ИИ...' : 'Подать заявку'}
           </button>
         </div>
       </form>

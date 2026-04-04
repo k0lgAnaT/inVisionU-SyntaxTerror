@@ -186,11 +186,11 @@ export default function ValidationPage() {
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={statsCompare}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
                     <XAxis dataKey="metric" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                     <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
                     <Tooltip
-                      contentStyle={{ background: '#0f1225', border: '1px solid rgba(59,92,255,0.3)', borderRadius: 8, color: '#fff', fontSize: 12 }}
+                      contentStyle={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, color: '#1e293b', fontSize: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                     />
                     <Legend wrapperStyle={{ fontSize: 12, color: '#94a3b8' }} />
                     <Bar dataKey="advanced" name="Advanced NLP" fill="#3b5cff" radius={[3, 3, 0, 0]} />
@@ -209,11 +209,11 @@ export default function ValidationPage() {
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={recData} layout="vertical">
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
                     <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                     <YAxis dataKey="name" type="category" tick={{ fill: '#94a3b8', fontSize: 11 }} width={90} />
                     <Tooltip
-                      contentStyle={{ background: '#0f1225', border: '1px solid rgba(59,92,255,0.3)', borderRadius: 8, color: '#fff', fontSize: 12 }}
+                      contentStyle={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, color: '#1e293b', fontSize: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                     />
                     <Bar dataKey="value" name="Candidates" radius={[0, 3, 3, 0]}>
                       {recData.map((entry, i) => (
@@ -235,11 +235,11 @@ export default function ValidationPage() {
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dimChartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" />
                     <XAxis dataKey="name" tick={{ fill: '#94a3b8', fontSize: 10 }} />
                     <YAxis domain={[0, 100]} tick={{ fill: '#94a3b8', fontSize: 11 }} />
                     <Tooltip
-                      contentStyle={{ background: '#0f1225', border: '1px solid rgba(59,92,255,0.3)', borderRadius: 8, color: '#fff', fontSize: 12 }}
+                      contentStyle={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, color: '#1e293b', fontSize: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                     />
                     <Legend wrapperStyle={{ fontSize: 11, color: '#94a3b8' }} />
                     <Bar dataKey="mean" name="Mean" fill="#3b5cff" radius={[3, 3, 0, 0]} />
@@ -280,12 +280,12 @@ export default function ValidationPage() {
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <RadarChart data={radarData}>
-                    <PolarGrid stroke="rgba(255,255,255,0.08)" />
+                    <PolarGrid stroke="rgba(0,0,0,0.08)" />
                     <PolarAngleAxis dataKey="dim" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                     <Radar name="Mean" dataKey="mean" stroke="#3b5cff" fill="#3b5cff" fillOpacity={0.2} strokeWidth={2} />
                     <Radar name="Max" dataKey="max" stroke="#34d399" fill="none" strokeWidth={1.5} strokeDasharray="4 4" />
                     <Legend wrapperStyle={{ fontSize: 11, color: '#94a3b8' }} />
-                    <Tooltip contentStyle={{ background: '#0f1225', border: '1px solid rgba(59,92,255,0.3)', borderRadius: 8, color: '#fff', fontSize: 12 }} />
+                    <Tooltip contentStyle={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 8, color: '#1e293b', fontSize: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
                   </RadarChart>
                 </ResponsiveContainer>
               </div>

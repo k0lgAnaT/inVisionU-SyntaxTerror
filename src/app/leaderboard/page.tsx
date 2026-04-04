@@ -151,7 +151,7 @@ export default function LeaderboardPage() {
             <span className="text-slate-600">of {candidates.length} candidates</span>
             {blindMode && (
               <span className="ml-2 px-2 py-0.5 rounded-full text-xs"
-                style={{ background: 'rgba(124,58,237,0.15)', color: '#c4b5fd', border: '1px solid rgba(124,58,237,0.3)' }}>
+                style={{ background: 'rgba(124,58,237,0.1)', color: '#7c3aed', border: '1px solid rgba(124,58,237,0.3)' }}>
                 🎭 Blind Mode
               </span>
             )}

@@ -107,7 +107,7 @@ export default function SubmitPage() {
                   <div className="text-xs text-slate-600">Score updates as you type (every 1.2s)</div>
                 </div>
                 <button onClick={() => setAutoScore(!autoScore)}
-                  className={`relative w-11 h-6 rounded-full transition-all duration-300 ${autoScore ? 'bg-brand-500' : 'bg-white/10'}`}>
+                  className={`relative w-11 h-6 rounded-full transition-all duration-300 ${autoScore ? 'bg-brand-500' : 'bg-slate-200'}`}>
                   <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-300 ${autoScore ? 'left-5.5 translate-x-0.5' : 'left-0.5'}`} />
                 </button>
               </div>
@@ -256,7 +256,7 @@ export default function SubmitPage() {
                     <div className="h-48">
                       <ResponsiveContainer width="100%" height="100%">
                         <RadarChart data={radarData}>
-                          <PolarGrid stroke="rgba(255,255,255,0.08)" />
+                          <PolarGrid stroke="rgba(0,0,0,0.08)" />
                           <PolarAngleAxis dataKey="dim" tick={{ fill: '#94a3b8', fontSize: 11 }} />
                           <Radar dataKey="score" stroke="#3b5cff" fill="#3b5cff" fillOpacity={0.25} strokeWidth={2} />
                         </RadarChart>
@@ -276,7 +276,7 @@ export default function SubmitPage() {
                             <span className="text-slate-600">{dim.label}</span>
                             <span style={{ color: getScoreColor(dim.score) }} className="font-mono font-bold">{dim.score}</span>
                           </div>
-                          <div className="h-1.5 rounded-full bg-white/10">
+                          <div className="h-1.5 rounded-full bg-slate-200">
                             <div className="h-full rounded-full transition-all duration-700"
                               style={{ width: `${dim.score}%`, background: getScoreColor(dim.score) }} />
                           </div>
@@ -293,7 +293,7 @@ export default function SubmitPage() {
                       <div className="flex flex-wrap gap-2">
                         {result.flags.map((f, i) => (
                           <span key={i} className="text-xs px-2 py-1 rounded-lg"
-                            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}>
+                            style={{ background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)', color: '#64748b' }}>
                             {f}
                           </span>
                         ))}

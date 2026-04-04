@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [firstName, setFirstName] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -14,6 +16,7 @@ export default function RegisterPage() {
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
+      localStorage.setItem('userName', firstName);
     }, 1000);
   };
 
@@ -49,7 +52,7 @@ export default function RegisterPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-xs font-semibold text-slate-600 mb-1 block">Имя (First name)</label>
-              <input required type="text" className="input-field" placeholder="Айгерим" />
+              <input required type="text" className="input-field" placeholder="Айгерим" value={firstName} onChange={e => setFirstName(e.target.value)} />
             </div>
             <div>
               <label className="text-xs font-semibold text-slate-600 mb-1 block">Фамилия (Last name)</label>

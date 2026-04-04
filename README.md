@@ -67,3 +67,4 @@ npm run dev
 
 ## 👥 Команда
 Разработано в рамках хакатона Decentrathon 5.0 для трека inDrive (AI inDrive).
+
