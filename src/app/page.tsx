@@ -97,7 +97,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <h1 className="text-4xl lg:text-5xl font-display font-bold text-slate-800 dark:text-white mb-3 leading-tight">
-                  Candidate <span className="gradient-text">Intelligence</span>
+                  Candidate <span className="gradient-text">Intelligence v2.0</span>
                   <br />Platform
                 </h1>
                 <p className="text-slate-600 dark:text-slate-300 text-base max-w-lg leading-relaxed">
