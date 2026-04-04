@@ -64,6 +64,13 @@ export default function ValidationPage() {
   const [source, setSource] = useState('');
 
   useEffect(() => {
+    // 🛡️ AUTH GUARD
+    const role = localStorage.getItem('userRole');
+    if (!role) {
+      window.location.href = '/login';
+      return;
+    }
+
     fetch('/api/validation')
       .then(r => r.json())
       .then(d => {

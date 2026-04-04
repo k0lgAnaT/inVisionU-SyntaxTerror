@@ -71,9 +71,11 @@ export default function StudentAdmissionPage() {
       if (result.success && result.data) {
         const savedTestScore = parseInt(localStorage.getItem('testScore') || '0', 10);
         
+        // Save to demo_submissions so Admin can see it
+        const existing = JSON.parse(localStorage.getItem('demo_submissions') || '[]');
+        localStorage.setItem('demo_submissions', JSON.stringify([result.data, ...existing]));
+        
         // HACKATHON DEMO LOGIC:
-        // Чтобы демо прошло успешно, студент должен И сдать тест (на 60% и выше) И загрузить документы.
-        // Мы используем эту логику, чтобы не провалить демо из-за случайного строгого ответа ИИ, но учитываем 2 этапа.
         if (savedTestScore >= 60) {
           localStorage.setItem('admissionStatus', 'invited');
         } else {

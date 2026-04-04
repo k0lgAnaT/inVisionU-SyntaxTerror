@@ -51,9 +51,21 @@ export default function DashboardPage() {
   const { t } = useLanguage();
 
   useEffect(() => {
+    // 🛡️ AUTH GUARD
+    const role = localStorage.getItem('userRole');
+    if (!role) {
+      window.location.href = '/login';
+      return;
+    }
+
     fetch('/api/candidates')
       .then(r => r.json())
-      .then(d => { setCandidates(d.data || []); setLoading(false); });
+      .then(d => {
+        const apiData = d.data || [];
+        const localData = JSON.parse(localStorage.getItem('demo_submissions') || '[]');
+        setCandidates([...localData, ...apiData]);
+        setLoading(false);
+      });
   }, []);
 
   const shortlisted = candidates.filter(c => c.shortlistRecommendation === 'STRONG_YES' || c.shortlistRecommendation === 'YES');

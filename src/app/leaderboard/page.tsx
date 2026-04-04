@@ -32,10 +32,23 @@ export default function LeaderboardPage() {
     setLoading(true);
     fetch(`/api/candidates?profile=${p}`)
       .then(r => r.json())
-      .then(d => { setCandidates(d.data || []); setLoading(false); });
+      .then(d => {
+        const apiData = d.data || [];
+        const localData = JSON.parse(localStorage.getItem('demo_submissions') || '[]');
+        setCandidates([...localData, ...apiData]);
+        setLoading(false);
+      });
   };
 
-  useEffect(() => { loadCandidates(profile); }, [profile]);
+  useEffect(() => {
+    // 🛡️ AUTH GUARD
+    const role = localStorage.getItem('userRole');
+    if (!role) {
+      window.location.href = '/login';
+      return;
+    }
+    loadCandidates(profile);
+  }, [profile]);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(d => d === 'desc' ? 'asc' : 'desc');

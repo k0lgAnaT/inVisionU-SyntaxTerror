@@ -9,26 +9,34 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [roleMode, setRoleMode] = useState<'student' | 'staff'>('student');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('password123');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    
     setLoading(true);
     
     // MOCK AUTHENTICATION: 
     setTimeout(() => {
       let finalRole = 'student';
       if (roleMode === 'staff') {
-        if (email.includes('admin')) {
+        if (email.toLowerCase().includes('admin')) {
           finalRole = 'admin';
         } else {
-          finalRole = 'commission'; // default staff is commission
+          finalRole = 'commission';
         }
       }
 
       localStorage.setItem('userRole', finalRole);
+      localStorage.setItem('userName', email.split('@')[0].split('.')[0].charAt(0).toUpperCase() + email.split('@')[0].split('.')[0].slice(1));
       
       // Redirect based on role
-      window.location.href = finalRole === 'student' ? '/student' : '/';
+      const target = finalRole === 'student' ? '/student' : '/';
+      window.location.href = target;
+      
+      // Fallback in case redirect takes time
+      setTimeout(() => setLoading(false), 2000);
     }, 800);
   };
 
@@ -88,11 +96,23 @@ export default function LoginPage() {
               <label className="text-xs font-semibold text-slate-600 block">{t('auth_password')}</label>
               <a href="#" className="text-xs text-slate-400 hover:text-brand-600 transition-colors">{t('auth_forgot')}</a>
             </div>
-            <input required type="password" className="input-field" placeholder="••••••••" defaultValue="password123" />
+            <input 
+              required 
+              type="password" 
+              className="input-field" 
+              placeholder="••••••••" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
 
-          <button type="submit" disabled={loading} className="btn-primary w-full py-3 mt-4 text-base shadow-sm">
-            {loading ? '...' : t('auth_login_btn')}
+          <button type="submit" disabled={loading} className="btn-primary w-full py-3 mt-4 text-base shadow-sm relative overflow-hidden">
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                {t('nav_api_online')}...
+              </span>
+            ) : t('auth_login_btn')}
           </button>
         </form>
 

@@ -11,6 +11,13 @@ export default function StudentDashboard() {
   const [interviewBooked, setInterviewBooked] = useState<string | null>(null);
 
   useEffect(() => {
+    // 🛡️ AUTH GUARD
+    const role = localStorage.getItem('userRole');
+    if (!role) {
+      window.location.href = '/login';
+      return;
+    }
+
     const savedName = localStorage.getItem('userName');
     if (savedName) setUserName(savedName);
     const savedStatus = localStorage.getItem('admissionStatus');
