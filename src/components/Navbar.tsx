@@ -38,7 +38,6 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profileInfo, setProfileInfo] = useState<{name: string, avatarUrl: string} | null>(null);
 
-  const isAuthPage = pathname === '/login' || pathname === '/register';
   const isLanding = pathname === '/';
 
   const loadProfile = () => {
