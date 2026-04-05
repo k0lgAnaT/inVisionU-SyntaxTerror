@@ -1,122 +1,110 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useLanguage } from '@/lib/i18n/LanguageContext';
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
+import { useLanguage } from '@/lib/i18n/LanguageContext';
 
 export default function ProfilePage() {
   const { t } = useLanguage();
-  const router = useRouter();
-  const [role, setRole] = useState<'student' | 'admin' | 'commission' | null>(null);
-  const [userName, setUserName] = useState('');
-  const [status, setStatus] = useState('pending');
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem('userRole') as 'student' | 'admin' | 'commission' | null;
-    if (!savedRole) {
-      router.push('/login');
+    const savedEmail = localStorage.getItem('userEmail') || '';
+    setEmail(savedEmail);
+    const savedName = localStorage.getItem('userName') || '';
+    
+    const userProfiles = JSON.parse(localStorage.getItem('userProfiles') || '{}');
+    if (savedEmail && userProfiles[savedEmail]) {
+      setName(userProfiles[savedEmail].name || savedName);
+      setAvatarUrl(userProfiles[savedEmail].avatarUrl || '');
     } else {
-      setRole(savedRole);
-      setUserName(localStorage.getItem('userName') || '');
-      setStatus(localStorage.getItem('admissionStatus') || 'pending');
+      setName(savedName);
     }
-  }, [router]);
+  }, []);
 
-  if (!role) return null;
-
-  const getRoleDisplayName = () => {
-    if (role === 'admin') return t('auth_admin');
-    if (role === 'commission') return t('auth_staff');
-    return t('auth_student');
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (email) {
+      const userProfiles = JSON.parse(localStorage.getItem('userProfiles') || '{}');
+      userProfiles[email] = {
+        name,
+        avatarUrl
+      };
+      localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
+      
+      localStorage.setItem('userName', name);
+      window.dispatchEvent(new Event('profileUpdated'));
+      
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    }
   };
+
+  const currentAvatar = avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${email || 'User'}`;
 
   return (
     <>
       <Navbar />
-      <main className="max-w-4xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <Link href={role === 'student' ? '/student' : '/'} className="text-sm font-semibold text-slate-500 hover:text-brand-600 mb-4 inline-block">← Назад</Link>
-          <h1 className="text-3xl font-display font-bold text-slate-800">{t('prof_title')}</h1>
-          <p className="text-slate-600 mt-2">{t('prof_role')}: {getRoleDisplayName()}</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          {/* Main User Card */}
-          <div className="md:col-span-1">
-            <div className="glass-card-static p-6 flex flex-col items-center text-center">
-              <div className="w-24 h-24 rounded-full bg-slate-200 border-4 border-white shadow-sm flex items-center justify-center text-slate-500 font-bold text-2xl mb-4 overflow-hidden">
-                {role === 'student' ? 'DL' : role === 'admin' ? 'A' : 'C'}
-              </div>
-              <h2 className="text-xl font-bold text-slate-800">
-                {userName ? userName : (role === 'student' ? 'Студент' : role === 'admin' ? 'Admin User' : 'Иван Иванов (Комиссия)')}
-              </h2>
-              <div className="px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-xs font-semibold mt-2">
-                {getRoleDisplayName()}
-              </div>
-            </div>
-          </div>
-
-          {/* Conditional Profile Details */}
-          <div className="md:col-span-2 space-y-6">
+      <main className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-[#0b0e1e]">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="glass-card p-8 animate-fade-in-up">
+            <h1 className="text-2xl font-display font-bold text-slate-800 dark:text-white mb-6">Настройки профиля</h1>
             
-            <div className="glass-card-static p-6">
-              <h3 className="text-lg font-bold text-slate-800 mb-4">Детали аккаунта</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-xs font-semibold text-slate-500 block mb-1">{t('auth_email_pass')}</label>
-                  <div className="font-medium text-slate-800">
-                    {role === 'student' ? (userName ? `${userName.toLowerCase().split(' ').join('.')}@invision-u.kz` : 'student@invision-u.kz') : role === 'admin' ? 'admin@invision-u.kz' : 'commission@invision-u.kz'}
-                  </div>
+            <form onSubmit={handleSave} className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white dark:border-slate-800 shadow-xl bg-slate-100 dark:bg-slate-800 shrink-0">
+                  <img src={currentAvatar} alt="Avatar" className="w-full h-full object-cover" />
                 </div>
-                <div>
-                  <label className="text-xs font-semibold text-slate-500 block mb-1">{t('nav_about')}</label>
-                  <div className="font-medium text-slate-800">{t('nav_api_online')}</div>
+                <div className="flex-1 w-full">
+                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">URL фото (аватарка)</label>
+                  <input 
+                    type="url" 
+                    className="input-field" 
+                    placeholder="https://example.com/my-photo.jpg" 
+                    value={avatarUrl}
+                    onChange={(e) => setAvatarUrl(e.target.value)}
+                  />
+                  <p className="text-[10px] text-slate-500 mt-1">Вставьте прямую ссылку на изображение, чтобы оно отображалось в системе.</p>
                 </div>
               </div>
-            </div>
 
-            {/* Student Specific */}
-            {role === 'student' && (
-              <div className={`p-6 rounded-2xl border ${
-                status === 'invited' ? 'bg-emerald-50 border-emerald-200' :
-                status === 'rejected' ? 'bg-red-50 border-red-200' :
-                'bg-brand-50 border-brand-200'
-              }`}>
-                <h3 className="text-lg font-bold text-slate-800 mb-2">Статус заявки</h3>
-                <p className="text-sm text-slate-600 mb-4">
-                  {status === 'invited' ? 'Приглашен на интервью! Проверьте вашу почту для деталей.' :
-                   status === 'rejected' ? 'К сожалению, статус заявки отклонен.' :
-                   'Ваши документы загружены и находятся на модерации.'}
-                </p>
-                <Link href="/student/admission" className="text-brand-600 font-semibold text-sm hover:underline">Проверить материалы →</Link>
+              <div>
+                <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Имя и фамилия</label>
+                <input 
+                  required 
+                  type="text" 
+                  className="input-field" 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </div>
-            )}
 
-            {/* Admin Specific */}
-            {role === 'admin' && (
-              <div className="glass-card-static p-6 bg-slate-800 text-white border-none">
-                <h3 className="text-lg font-bold text-white mb-2">{t('prof_commission_panel')}</h3>
-                <p className="text-sm text-slate-400 mb-4">{t('auth_staff_hint')}</p>
-                <Link href="/admin/users" className="bg-brand-500 text-white rounded-lg px-4 py-2 font-semibold text-sm inline-block transition hover:bg-brand-400">
-                  {t('prof_add_commission')} →
-                </Link>
+              <div>
+                <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">Email (только для чтения)</label>
+                <input 
+                  type="text" 
+                  className="input-field opacity-50 cursor-not-allowed" 
+                  value={email}
+                  readOnly
+                  disabled
+                />
+                <p className="text-[10px] text-slate-500 mt-1">Этот email используется для идентификации и доступа.</p>
               </div>
-            )}
 
-            {/* Commission Specific */}
-            {role === 'commission' && (
-              <div className="glass-card-static p-6">
-                <h3 className="text-lg font-bold text-slate-800 mb-2">Назначенные абитуриенты</h3>
-                <p className="text-sm text-slate-600 mb-4">Вам пока не назначены кандидаты для ручной проверки эссе.</p>
-                <Link href="/" className="text-brand-600 font-semibold text-sm hover:underline">Перейти в общий дашборд →</Link>
+              <div className="pt-4 flex items-center justify-between border-t border-slate-100 dark:border-slate-800 mt-6 pt-6">
+                <div>
+                  {saved && <span className="text-sm font-semibold text-emerald-600">✓ Изменения сохранены</span>}
+                </div>
+                <button type="submit" className="btn-primary px-8">
+                  Сохранить
+                </button>
               </div>
-            )}
-
+            </form>
           </div>
-
         </div>
       </main>
     </>

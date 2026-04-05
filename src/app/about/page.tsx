@@ -100,12 +100,6 @@ export default function AboutPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 🛡️ AUTH GUARD
-    const role = localStorage.getItem('userRole');
-    if (!role) {
-      window.location.href = '/login';
-      return;
-    }
     setLoading(false);
   }, []);
 

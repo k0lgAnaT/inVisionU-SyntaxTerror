@@ -38,8 +38,8 @@ function MetricCard({ label, value, sub, color, hint }: {
   return (
     <div className="glass-card p-5" title={hint}>
       <div className="text-3xl font-display font-bold mb-1" style={{ color: color || '#6088ff' }}>{value}</div>
-      <div className="text-slate-800 font-semibold text-sm">{label}</div>
-      {sub && <div className="text-slate-500 text-xs mt-0.5">{sub}</div>}
+      <div className="text-slate-800 dark:text-white font-semibold text-sm">{label}</div>
+      {sub && <div className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">{sub}</div>}
     </div>
   );
 }
@@ -88,7 +88,7 @@ export default function ValidationPage() {
       <div className="min-h-screen pt-20 flex items-center justify-center">
         <div className="text-center">
           <div className="w-10 h-10 rounded-full border-2 border-brand-400 border-t-transparent animate-spin mx-auto mb-3" />
-          <p className="text-slate-600 text-sm">Validating...</p>
+          <p className="text-slate-600 dark:text-slate-400 text-sm">Validating...</p>
         </div>
       </div>
     </>
@@ -147,7 +147,7 @@ export default function ValidationPage() {
                 {source === 'python_nlp' ? 'PYTHON NLP' : 'TS CORE'}
               </span>
             </div>
-            <p className="text-slate-600 text-sm max-w-2xl">
+            <p className="text-slate-600 dark:text-slate-400 text-sm max-w-2xl">
               {t('val_report_desc')}
             </p>
           </div>
@@ -186,7 +186,7 @@ export default function ValidationPage() {
             {/* Score Distribution Comparison */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-200">
               <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">{t('val_dist_title')}</h3>
-              <p className="text-slate-600 text-xs mb-4">
+              <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">
                 {t('val_dist_desc')}
               </p>
               <div className="h-52">
@@ -234,7 +234,7 @@ export default function ValidationPage() {
             {/* Dimension Statistics */}
             <div className="glass-card-static p-5 animate-fade-in-up delay-300">
               <h3 className="font-display font-bold text-slate-800 dark:text-white mb-1">{t('val_stats_title')}</h3>
-              <p className="text-slate-600 text-xs mb-4">{t('val_stats_desc')}</p>
+              <p className="text-slate-600 dark:text-slate-400 text-xs mb-4">{t('val_stats_desc')}</p>
               <div className="h-52">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dimChartData}>
@@ -264,11 +264,11 @@ export default function ValidationPage() {
                   </thead>
                   <tbody>
                     {Object.entries(data.dimension_statistics).map(([key, stats]) => (
-                      <tr key={key} className="border-b border-slate-100">
-                        <td className="py-1.5 pr-3 text-slate-700">{DIM_LABELS[key] || key}</td>
-                        <td className="py-1.5 pr-3 text-right font-mono text-slate-800">{stats.mean}</td>
-                        <td className="py-1.5 pr-3 text-right font-mono text-slate-800">{stats.median}</td>
-                        <td className="py-1.5 text-right font-mono text-slate-500">{stats.std}</td>
+                      <tr key={key} className="border-b border-slate-100 dark:border-white/5">
+                        <td className="py-1.5 pr-3 text-slate-700 dark:text-slate-300">{DIM_LABELS[key] || key}</td>
+                        <td className="py-1.5 pr-3 text-right font-mono text-slate-800 dark:text-slate-200">{stats.mean}</td>
+                        <td className="py-1.5 pr-3 text-right font-mono text-slate-800 dark:text-slate-200">{stats.median}</td>
+                        <td className="py-1.5 text-right font-mono text-slate-500 dark:text-slate-400">{stats.std}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -319,14 +319,14 @@ export default function ValidationPage() {
                       <tr key={i}>
                         <td className="font-semibold text-slate-800 dark:text-slate-200">{ec.candidate_name}</td>
                         <td className="font-mono font-bold text-brand-600">{ec.advanced_score}</td>
-                        <td className="font-mono text-slate-500">{ec.baseline_score}</td>
+                        <td className="font-mono text-slate-500 dark:text-slate-400">{ec.baseline_score}</td>
                         <td className="font-mono font-bold text-amber-500">Δ{ec.difference}</td>
                         <td>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 uppercase font-black">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 uppercase font-black">
                             {ec.direction.replace('_', ' ')}
                           </span>
                         </td>
-                        <td className="text-xs text-slate-500 max-w-xs">{ec.likely_reason}</td>
+                        <td className="text-xs text-slate-500 dark:text-slate-400 max-w-xs">{ec.likely_reason}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import Navbar from '@/components/Navbar';
 
 export default function RegisterPage() {
   const { t } = useLanguage();
@@ -25,13 +26,15 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-background p-4">
+      <>
+        <Navbar />
+        <main className="min-h-screen flex items-center justify-center bg-background p-4 pb-16">
         <div className="glass-card-static max-w-md w-full p-8 text-center animate-fade-in-up">
           <div className="w-16 h-16 bg-brand-400 text-black rounded-full flex items-center justify-center text-3xl mx-auto mb-6">✓</div>
-          <h1 className="text-2xl font-display font-bold text-slate-800 mb-2">
+          <h1 className="text-2xl font-display font-bold text-slate-800 dark:text-white mb-2">
             {t('auth_register_title')}!
           </h1>
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-400 mb-6">
             {t('auth_welcome_msg')}
           </p>
           <Link href="/login" className="btn-primary w-full block py-3 text-center">
@@ -39,34 +42,37 @@ export default function RegisterPage() {
           </Link>
         </div>
       </main>
+      </>
     );
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background p-4">
+    <>
+      <Navbar />
+      <main className="min-h-screen flex items-center justify-center bg-background p-4 pb-16">
       <div className="glass-card-static max-w-lg w-full p-8 animate-fade-in-up">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-block p-1 bg-brand-50 rounded-xl mb-4 border border-brand-100">
-            <div className="text-brand-600 font-display font-black text-xl px-4 py-1">inVision U</div>
+          <div className="inline-block p-1 bg-brand-50 dark:bg-brand-900/30 rounded-xl mb-4 border border-brand-100 dark:border-brand-800">
+            <div className="text-brand-600 dark:text-brand-400 font-display font-black text-xl px-4 py-1">inVision U</div>
           </div>
-          <h1 className="text-2xl font-display font-bold text-slate-800 mb-1">
+          <h1 className="text-2xl font-display font-bold text-slate-800 dark:text-white mb-1">
             {t('auth_register_title')}
           </h1>
-          <p className="text-xs text-slate-500">{t('auth_register_sub')}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('auth_register_sub')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-semibold text-slate-600 mb-1 block">
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">
                 {t('auth_full_name')}
               </label>
               <input required type="text" className="input-field" placeholder="Aigerim" value={firstName} onChange={e => setFirstName(e.target.value)} />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-600 mb-1 block">
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">
                 {t('auth_city')}
               </label>
               <input required type="text" className="input-field" placeholder="Almaty" />
@@ -74,27 +80,27 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-600 mb-1 block">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">
               {t('auth_email_pass')}
             </label>
             <input required type="email" className="input-field" placeholder="applicant@invision-u.kz" />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-600 mb-1 block">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">
               {t('auth_password')}
             </label>
             <input required minLength={6} type="password" className="input-field" placeholder="••••••••" />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-600 mb-1 block">
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">
                {t('auth_phone')}
             </label>
             <input required type="tel" className="input-field" placeholder="+7 777 777 77 77" />
           </div>
 
-          <div className="text-[10px] text-slate-400 mt-2 mb-6 text-center leading-tight">
+          <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-2 mb-6 text-center leading-tight">
             {t('auth_privacy')}
           </div>
 
@@ -103,10 +109,11 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-slate-600">
-          {t('auth_already_have')} <Link href="/login" className="text-brand-600 font-semibold hover:underline">{t('auth_login_link')}</Link>
+        <div className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
+          {t('auth_already_have')} <Link href="/login" className="text-brand-600 dark:text-brand-400 font-semibold hover:underline">{t('auth_login_link')}</Link>
         </div>
       </div>
     </main>
+    </>
   );
 }

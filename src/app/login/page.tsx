@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
+import Navbar from '@/components/Navbar';
 
 export default function LoginPage() {
   const { t } = useLanguage();
@@ -10,10 +11,12 @@ export default function LoginPage() {
   const [roleMode, setRoleMode] = useState<'student' | 'staff'>('student');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('password123');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
+    setError('');
     
     setLoading(true);
     
@@ -24,11 +27,19 @@ export default function LoginPage() {
         if (email.toLowerCase().includes('admin')) {
           finalRole = 'admin';
         } else {
-          finalRole = 'commission';
+          const members = JSON.parse(localStorage.getItem('committee_members') || '[]');
+          if (members.includes(email.toLowerCase())) {
+            finalRole = 'commission';
+          } else {
+            setError('Доступ запрещен. Ваш email не добавлен администратором.');
+            setLoading(false);
+            return;
+          }
         }
       }
 
       localStorage.setItem('userRole', finalRole);
+      localStorage.setItem('userEmail', email.toLowerCase());
       localStorage.setItem('userName', email.split('@')[0].split('.')[0].charAt(0).toUpperCase() + email.split('@')[0].split('.')[0].slice(1));
       
       // Redirect based on role
@@ -41,43 +52,51 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
-      
-      {/* Decorative background map (subtle) */}
+    <>
+      <Navbar />
+      <main className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden pb-16">
+        
+        {/* Decorative background map (subtle) */}
       <div className="map-bg pointer-events-none absolute inset-0"></div>
 
       <div className="glass-card-static max-w-md w-full p-8 animate-fade-in z-10">
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-block p-1 bg-brand-50 rounded-xl mb-4 border border-brand-100">
-            <div className="text-brand-600 font-display font-black text-xl px-4 py-1">inVision U</div>
+          <div className="inline-block p-1 bg-brand-50 dark:bg-brand-900/30 rounded-xl mb-4 border border-brand-100 dark:border-brand-800">
+            <div className="text-brand-600 dark:text-brand-400 font-display font-black text-xl px-4 py-1">inVision U</div>
           </div>
-          <h1 className="text-2xl font-display font-bold text-slate-800 mb-1">{t('auth_welcome')}</h1>
-          <p className="text-xs text-slate-500">{t('auth_login_sub')}</p>
+          <h1 className="text-2xl font-display font-bold text-slate-800 dark:text-white mb-1">{t('auth_welcome')}</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('auth_login_sub')}</p>
         </div>
 
         {/* Role Toggle */}
-        <div className="flex bg-slate-100 p-1 rounded-xl mb-6">
+        <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl mb-6">
           <button 
             type="button"
             onClick={() => { setRoleMode('student'); setEmail('diana.lee@invision-u.kz'); }}
-            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${roleMode === 'student' ? 'bg-white shadow-sm text-brand-600' : 'text-slate-500'}`}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${roleMode === 'student' ? 'bg-white dark:bg-[#111633] shadow-sm text-brand-600 dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
           >
             {t('auth_student')}
           </button>
           <button 
             type="button"
-            onClick={() => { setRoleMode('staff'); setEmail('admin@invision-u.kz'); }}
-            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${roleMode === 'staff' ? 'bg-white shadow-sm text-brand-600' : 'text-slate-500'}`}
+            onClick={() => { setRoleMode('staff'); setEmail('admin@invision-u.kz'); setError(''); }}
+            className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${roleMode === 'staff' ? 'bg-white dark:bg-[#111633] shadow-sm text-brand-600 dark:text-brand-400' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
           >
             {t('auth_staff')}
           </button>
         </div>
 
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-xs text-center font-medium">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-slate-600 mb-1 block">{t('auth_email_pass')}</label>
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1 block">{t('auth_email_pass')}</label>
             <input 
               required 
               type="text" 
@@ -87,14 +106,14 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
             />
             {roleMode === 'staff' && (
-              <p className="text-[10px] text-slate-400 mt-1 pl-1">{t('auth_staff_hint')}</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 pl-1">{t('auth_staff_hint')}</p>
             )}
           </div>
 
           <div>
             <div className="flex justify-between mb-1">
-              <label className="text-xs font-semibold text-slate-600 block">{t('auth_password')}</label>
-              <a href="#" className="text-xs text-slate-400 hover:text-brand-600 transition-colors">{t('auth_forgot')}</a>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block">{t('auth_password')}</label>
+              <a href="#" className="text-xs text-slate-400 dark:text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">{t('auth_forgot')}</a>
             </div>
             <input 
               required 
@@ -117,12 +136,13 @@ export default function LoginPage() {
         </form>
 
         {roleMode === 'student' && (
-          <div className="mt-8 text-center text-sm text-slate-600 border-t border-slate-100 pt-6">
+          <div className="mt-8 text-center text-sm text-slate-600 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-6">
             {t('auth_no_account')} <br/>
-            <Link href="/register" className="text-brand-600 font-semibold hover:underline mt-1 inline-block">{t('auth_register_link')}</Link>
+            <Link href="/register" className="text-brand-600 dark:text-brand-400 font-semibold hover:underline mt-1 inline-block">{t('auth_register_link')}</Link>
           </div>
         )}
       </div>
     </main>
+    </>
   );
 }

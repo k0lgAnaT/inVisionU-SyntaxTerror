@@ -68,13 +68,41 @@ export default function CandidatePage() {
   const [committeeNote, setCommitteeNote] = useState('');
   const [decision, setDecision] = useState<'shortlist' | 'hold' | 'pass' | null>(null);
   const [blindMode, setBlindMode] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+
+    const savedBlindMode = localStorage.getItem('blindMode');
+    if (savedBlindMode === 'true') {
+      setBlindMode(true);
+    }
+
     if (!params.id) return;
+    
+    // Load saved committee decision
+    const allDecisions = JSON.parse(localStorage.getItem('committee_candidate_decisions') || '{}');
+    if (allDecisions[params.id as string]) {
+      setDecision(allDecisions[params.id as string]);
+    }
     fetch(`/api/candidates/${params.id}`)
       .then(r => r.json())
       .then(d => { setSc(d.data); setLoading(false); });
   }, [params.id]);
+
+  const handleDecision = (d: 'shortlist' | 'hold' | 'pass') => {
+    if (userRole === 'admin') return; 
+    const newD = decision === d ? null : d;
+    setDecision(newD);
+    const allDecisions = JSON.parse(localStorage.getItem('committee_candidate_decisions') || '{}');
+    if (newD) {
+      allDecisions[params.id as string] = newD;
+    } else {
+      delete allDecisions[params.id as string];
+    }
+    localStorage.setItem('committee_candidate_decisions', JSON.stringify(allDecisions));
+  };
 
   if (loading) return (
     <>
@@ -239,30 +267,49 @@ export default function CandidatePage() {
                 <h3 className="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-3">
                   {t('cand_committee_verdict')} <span className="text-brand-600">(Human)</span>
                 </h3>
-                <div className="flex gap-2 mb-3">
-                  {(['shortlist', 'hold', 'pass'] as const).map(d => (
-                    <button key={d} onClick={() => setDecision(decision === d ? null : d)}
-                      className="flex-1 py-2 rounded-lg text-xs font-semibold transition-all capitalize"
-                      style={decision === d && decisionColors[d] ? {
-                        background: decisionColors[d].bg,
-                        border: `1px solid ${decisionColors[d].border}`,
-                        color: decisionColors[d].text,
-                      } : { background: 'rgba(148, 163, 184, 0.1)', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
-                      {d === 'shortlist' ? t('cand_shortlist') : d === 'hold' ? t('cand_hold') : t('cand_pass')}
-                    </button>
-                  ))}
-                </div>
-                <textarea
-                  value={committeeNote}
-                  onChange={e => setCommitteeNote(e.target.value)}
-                  placeholder="..."
-                  className="input-field text-xs bg-transparent"
-                  rows={3}
-                />
-                {decision && (
-                  <div className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">
-                    ✓ {t('cand_decision_rec')} <strong className="capitalize">{t('cand_' + decision as any)}</strong>
+                
+                {userRole === 'admin' ? (
+                  <div className="text-center py-4 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/10">
+                     <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 px-2">Итоговое решение принимается членами приемной комиссии.</p>
+                     {decision ? (
+                       <div className="inline-block px-4 py-2 rounded-xl text-sm font-bold capitalize"
+                         style={{ background: decisionColors[decision].bg, color: decisionColors[decision].text, border: `1px solid ${decisionColors[decision].border}` }}>
+                         Решение комиссии: {decision === 'shortlist' ? t('cand_shortlist') : decision === 'hold' ? t('cand_hold') : t('cand_pass')}
+                       </div>
+                     ) : (
+                       <div className="inline-block px-4 py-2 rounded-xl text-sm font-bold text-slate-500 bg-slate-200/50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700">
+                         Статус: В ожидании
+                       </div>
+                     )}
                   </div>
+                ) : (
+                  <>
+                    <div className="flex gap-2 mb-3">
+                      {(['shortlist', 'hold', 'pass'] as const).map(d => (
+                        <button key={d} onClick={() => handleDecision(d)}
+                          className="flex-1 py-2 rounded-lg text-xs font-semibold transition-all capitalize"
+                          style={decision === d && decisionColors[d] ? {
+                            background: decisionColors[d].bg,
+                            border: `1px solid ${decisionColors[d].border}`,
+                            color: decisionColors[d].text,
+                          } : { background: 'rgba(148, 163, 184, 0.1)', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                          {d === 'shortlist' ? t('cand_shortlist') : d === 'hold' ? t('cand_hold') : t('cand_pass')}
+                        </button>
+                      ))}
+                    </div>
+                    <textarea
+                      value={committeeNote}
+                      onChange={e => setCommitteeNote(e.target.value)}
+                      placeholder="..."
+                      className="input-field text-xs bg-transparent"
+                      rows={3}
+                    />
+                    {decision && (
+                      <div className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">
+                        ✓ {t('cand_decision_rec')} <strong className="capitalize">{t('cand_' + decision as any)}</strong>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>

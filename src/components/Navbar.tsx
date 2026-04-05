@@ -14,6 +14,7 @@ const adminNavItems: { href: string; labelKey: TranslationKey; icon: string }[] 
   { href: '/validation', labelKey: 'nav_validation', icon: '📊' },
   { href: '/submit', labelKey: 'nav_submit', icon: '⚡' },
   { href: '/profile', labelKey: 'prof_title', icon: '👤' },
+  { href: '/about', labelKey: 'nav_about', icon: 'ℹ️' },
 ];
 
 const studentNavItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
@@ -21,6 +22,11 @@ const studentNavItems: { href: string; labelKey: TranslationKey; icon: string }[
   { href: '/student/test', labelKey: 'nav_test', icon: '🧠' },
   { href: '/student/admission', labelKey: 'nav_admission', icon: '📝' },
   { href: '/profile', labelKey: 'prof_title', icon: '👤' },
+  { href: '/about', labelKey: 'nav_about', icon: 'ℹ️' },
+];
+
+const guestNavItems: { href: string; labelKey: TranslationKey; icon: string }[] = [
+  { href: '/about', labelKey: 'nav_about', icon: 'ℹ️' },
 ];
 
 export default function Navbar() {
@@ -30,18 +36,38 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [role, setRole] = useState<'student' | 'admin' | 'commission' | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [profileInfo, setProfileInfo] = useState<{name: string, avatarUrl: string} | null>(null);
 
   const isAuthPage = pathname === '/login' || pathname === '/register';
   const isLanding = pathname === '/';
 
+  const loadProfile = () => {
+    const userEmail = localStorage.getItem('userEmail');
+    const userName = localStorage.getItem('userName');
+    if (userEmail) {
+      const userProfiles = JSON.parse(localStorage.getItem('userProfiles') || '{}');
+      const p = userProfiles[userEmail];
+      if (p) {
+        setProfileInfo({ name: p.name || userName || 'User', avatarUrl: p.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userEmail}` });
+      } else {
+        setProfileInfo({ name: userName || 'User', avatarUrl: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userEmail}` });
+      }
+    } else {
+      setProfileInfo(null);
+    }
+  };
+
   useEffect(() => {
     const savedRole = localStorage.getItem('userRole') as 'student' | 'admin' | 'commission' | null;
     setRole(savedRole);
+    loadProfile();
+
+    const handleProfileUpdate = () => loadProfile();
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+    return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
   }, [pathname]);
 
-  if (isAuthPage) return null;
-
-  const navItems = role === 'student' ? studentNavItems : role ? adminNavItems : [];
+  const navItems = role === 'student' ? studentNavItems : role ? adminNavItems : guestNavItems;
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');
@@ -64,31 +90,29 @@ export default function Navbar() {
               </span>
             </Link>
 
-            {role && (
-              <div className="hidden lg:block">
-                <div className="flex items-baseline space-x-1">
-                  {navItems.map((item) => {
-                    const isActive = pathname === item.href;
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                          isActive 
-                            ? 'text-brand-600 bg-brand-50 dark:bg-brand-900/20' 
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          {item.icon && <span className="opacity-70">{item.icon}</span>}
-                          {t(item.labelKey)}
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
+            <div className="hidden lg:block">
+              <div className="flex items-baseline space-x-1">
+                {navItems.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                        isActive 
+                          ? 'text-brand-600 bg-brand-50 dark:bg-brand-900/20' 
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        {item.icon && <span className="opacity-70">{item.icon}</span>}
+                        {t(item.labelKey)}
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
-            )}
+            </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
@@ -112,9 +136,20 @@ export default function Navbar() {
             
             <div className="flex items-center gap-2">
               {role ? (
-                 <button onClick={handleLogout} className="btn-secondary py-1.5 px-4 text-xs font-bold">
-                    {t('nav_logout')}
-                 </button>
+                 <div className="flex items-center gap-3 ml-2">
+                   {profileInfo && (
+                     <div className="hidden sm:flex items-center gap-2">
+                       <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{profileInfo.name}</span>
+                       <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-brand-200 dark:border-brand-800 shrink-0 bg-slate-100">
+                         <img src={profileInfo.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                       </div>
+                     </div>
+                   )}
+                   <button onClick={handleLogout} className="btn-secondary p-2 sm:px-4 sm:py-1.5 text-xs font-bold" title={t('nav_logout')}>
+                      <span className="hidden sm:inline">{t('nav_logout')}</span>
+                      <span className="sm:hidden">🚪</span>
+                   </button>
+                 </div>
               ) : (
                 !isLanding && (
                   <Link href="/login" className="btn-primary py-1.5 px-4 text-xs font-bold">

@@ -48,6 +48,10 @@ export default function AdminDashboardPage() {
   const [candidates, setCandidates] = useState<ScoredCandidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [blindMode, setBlindMode] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [committeeMembers, setCommitteeMembers] = useState<string[]>([]);
+  const [newMemberEmail, setNewMemberEmail] = useState('');
+  const [profiles, setProfiles] = useState<Record<string, any>>({});
   const { t, lang } = useLanguage();
 
   useEffect(() => {
@@ -57,6 +61,15 @@ export default function AdminDashboardPage() {
       window.location.href = '/login';
       return;
     }
+    setUserRole(role);
+    
+    // Load Committee
+    const savedMembers = JSON.parse(localStorage.getItem('committee_members') || '[]');
+    setCommitteeMembers(savedMembers);
+
+    // Load User Profiles
+    const userProfiles = JSON.parse(localStorage.getItem('userProfiles') || '{}');
+    setProfiles(userProfiles);
 
     fetch('/api/candidates')
       .then(r => r.json())
@@ -66,7 +79,28 @@ export default function AdminDashboardPage() {
         setCandidates([...localData, ...apiData]);
         setLoading(false);
       });
+      
+    // LOAD BLIND MODE
+    const savedBlindMode = localStorage.getItem('blindMode');
+    if (savedBlindMode === 'true') {
+      setBlindMode(true);
+    }
   }, []);
+
+  const toggleBlindMode = () => {
+    const newVal = !blindMode;
+    setBlindMode(newVal);
+    localStorage.setItem('blindMode', newVal ? 'true' : 'false');
+  };
+
+  const handleAddMember = () => {
+    if (newMemberEmail && !committeeMembers.includes(newMemberEmail)) {
+      const updated = [...committeeMembers, newMemberEmail];
+      setCommitteeMembers(updated);
+      localStorage.setItem('committee_members', JSON.stringify(updated));
+      setNewMemberEmail('');
+    }
+  };
 
   const shortlisted = candidates.filter(c => c.shortlistRecommendation === 'STRONG_YES' || c.shortlistRecommendation === 'YES');
   const flagged = candidates.filter(c => c.flags.some(f => f.includes('AI')));
@@ -104,13 +138,16 @@ export default function AdminDashboardPage() {
                   <Link href="/leaderboard" className="btn-primary w-full sm:w-auto text-center">
                     {t('nav_leaderboard')} →
                   </Link>
-                    <Link href="/submit" className="btn-secondary w-full sm:w-auto text-center">
-                      {t('nav_submit')}
-                    </Link>
-                    <Link href="/admin/users" className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all border border-emerald-500/30 flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg shadow-emerald-500/20">
-                      👥 {t('prof_add_commission')}
-                    </Link>
-                  </div>
+                  <Link href="/submit" className="btn-secondary w-full sm:w-auto text-center">
+                    {t('nav_submit')}
+                  </Link>
+                  <button 
+                    onClick={toggleBlindMode}
+                    className={`px-4 py-2.5 rounded-xl text-sm font-semibold transition-all border flex items-center justify-center gap-2 w-full sm:w-auto shadow-lg ${blindMode ? 'bg-purple-600 hover:bg-purple-700 text-white border-purple-500/30 shadow-purple-500/20' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700 hover:bg-slate-300 dark:hover:bg-slate-700'}`}
+                  >
+                    🎭 {blindMode ? 'Выключить Blind Mode' : 'Включить Blind Mode'}
+                  </button>
+                </div>
                 </div>
 
               {!loading && (
@@ -170,6 +207,55 @@ export default function AdminDashboardPage() {
                     <div className="text-purple-700 dark:text-purple-400 font-semibold text-sm">{t('lead_blind_mode')} {t('dash_blind_active')}</div>
                     <div className="text-slate-600 dark:text-slate-400 text-xs text-balance">{t('dash_blind_desc')}</div>
                   </div>
+                </div>
+              )}
+
+              {/* Committee Management (Admin Only) */}
+              {userRole === 'admin' && (
+                <div className="glass-card p-6 mb-8 animate-fade-in-up delay-[150ms]">
+                  <h3 className="font-display font-bold text-slate-800 dark:text-white mb-2">Управление Приемной Комиссией</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">Добавьте email-адреса членов комитета, которые будут иметь право принимать финальные решения по кандидатам.</p>
+                  <div className="flex gap-2 mb-4">
+                    <input 
+                      type="email" 
+                      value={newMemberEmail} 
+                      onChange={e => setNewMemberEmail(e.target.value)} 
+                      placeholder="Email эксперта" 
+                      className="input-field max-w-sm"
+                    />
+                    <button onClick={handleAddMember} className="btn-primary ml-2 px-6">Пригласить</button>
+                  </div>
+                  {committeeMembers.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+                       {committeeMembers.map(email => {
+                         const p = profiles[email] || {};
+                         const avatarUrl = p.avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`;
+                         const name = p.name || email.split('@')[0];
+                         return (
+                           <div key={email} className="flex items-center gap-4 bg-white dark:bg-[#111633]/80 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm relative group overflow-hidden transition-all hover:border-brand-300 dark:hover:border-brand-700/50">
+                             <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-slate-100 dark:border-slate-800 shrink-0 bg-slate-100">
+                               <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                             </div>
+                             <div className="flex-1 min-w-0 pr-8">
+                               <div className="font-bold text-sm text-slate-800 dark:text-white truncate">{name}</div>
+                               <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{email}</div>
+                             </div>
+                             <button
+                               onClick={() => {
+                                 const updated = committeeMembers.filter(e => e !== email);
+                                 setCommitteeMembers(updated);
+                                 localStorage.setItem('committee_members', JSON.stringify(updated));
+                               }}
+                               className="w-8 h-8 rounded-full flex items-center justify-center text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all absolute right-2 pb-0.5"
+                               title="Удалить"
+                             >
+                               ✕
+                             </button>
+                           </div>
+                         );
+                       })}
+                    </div>
+                  )}
                 </div>
               )}
 
